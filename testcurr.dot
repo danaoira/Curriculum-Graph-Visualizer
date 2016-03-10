@@ -1,0 +1,5 @@
+# cgv.dot - Resulting DOT output from Python Graphviz input
+
+digraph cgv {
+		"A" -> "B"
+}
