@@ -54,7 +54,6 @@ c.attr('node', style='filled', color='grey')
 c.node('MATH 150A')
 c.node('MATH 270A')
 c.node('CPSC 120')
-c.node('ENGL 101')
 
 # semester 1 suggestion
 c.attr('node', style='filled', color='pink')
@@ -69,32 +68,40 @@ c.node('MATH 338')
 
 # semester 3 suggestion
 c.attr('node', style='filled', color='peachpuff')
+c.node('MATH 250A')
 c.node('CPSC 240')
 c.node('CPSC 254')
-c.node('CPSC 223')
-c.node('CPSC 332')
+c.node('CPSC 223J')
 c.node('CPSC 311')
 
 # semester 4 suggestion
 c.attr('node', style='filled', color='darkseagreen')
-c.node('CPSC 440')
+c.node('PHYS 225')
+c.node('PHYS 225L')
 c.node('CPSC 301')
-c.node('CPSC 351')
+c.node('CPSC 332')
 c.node('CPSC 315')
 
 # semester 5 suggestion
 c.attr('node', style='filled', color='lightblue')
+c.node('PHYS 226')
+c.node('PHYS 226L')
 c.node('CPSC 335')
+c.node('CPSC 351')
 c.node('CPSC 323')
-c.node('CPSC 471')
 c.node('CPSC 362')
 
 # semester 6 suggestion
 c.attr('node', style='filled', color='plum')
 c.node('CPSC 481')
+c.node('CPSC 471')
+c.node('CPSC 440')
+c.node('CPSC 431')
 
-# other
+# semester 7 suggestion
 c.attr('node', style='filled', color='lightblue')
+c.node('CPSC 473')
+c.node('CPSC 476')
 
 # major prerequisite tree
 c.edge('CPSC 120', 'CPSC 121')
