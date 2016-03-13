@@ -1,0 +1,68 @@
+digraph finalcgv {
+	subgraph cluster_0 {
+		node [color=white style=filled]
+		size="6,6"
+		style=filled
+		color=lightgrey
+		rankdir=LR
+				Completed -> "Semester 1"
+				"Semester 1" -> "Semester 2"
+				"Semester 2" -> " Semester 3"
+		label = "process #1"
+	}
+	node [color=grey style=filled]
+	"MATH 150A"
+	"MATH 270A"
+	"CPSC 120"
+	"ENGL 101"
+	node [color=pink style=filled]
+	"MATH 150B"
+	"MATH 270B"
+	"CPSC 121"
+	node [color=lightsalmon style=filled]
+	"CPSC 131"
+	"MATH 338"
+	node [color=peachpuff style=filled]
+	"CPSC 240"
+	"CPSC 254"
+	"CPSC 223"
+	"CPSC 332"
+	"CPSC 311"
+	node [color=darkseagreen style=filled]
+	"CPSC 440"
+	"CPSC 301"
+	"CPSC 351"
+	"CPSC 315"
+	node [color=lightblue style=filled]
+	"CPSC 335"
+	"CPSC 323"
+	"CPSC 471"
+	"CPSC 362"
+	node [color=plum style=filled]
+	"CPSC 481"
+	node [color=lightblue style=filled]
+		"MATH 150A" -> "MATH 150B"
+		"MATH 150B" -> "MATH 338"
+		"MATH 338" -> "CPSC 335"
+		"MATH 270A" -> "MATH 270B"
+		"MATH 270A" -> "CPSC 240"
+		"MATH 270B" -> "CPSC 335"
+		"CPSC 335" -> "CPSC 481"
+		"CPSC 240" -> "CPSC 440"
+		"CPSC 120" -> "CPSC 121"
+		"CPSC 121" -> "CPSC 131"
+		"CPSC 131" -> "CPSC 240"
+		"CPSC 131" -> "CPSC 223"
+		"CPSC 131" -> "CPSC 254"
+		"CPSC 131" -> "CPSC 332"
+		"CPSC 131" -> "CPSC 311"
+		"CPSC 254" -> "CPSC 301"
+		"CPSC 254" -> "CPSC 351"
+		"CPSC 301" -> "CPSC 335"
+		"CPSC 301" -> "CPSC 323"
+		"CPSC 301" -> "CPSC 362"
+		"CPSC 351" -> "CPSC 471"
+		"ENGL 101" -> "CPSC 311"
+		"CPSC 311" -> "CPSC 315"
+		"CPSC 311" -> "CPSC 362"
+}
