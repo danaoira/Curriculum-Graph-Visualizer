@@ -2,7 +2,7 @@
 
 from graphviz import Digraph
 
-c = Digraph('finalcgv', filename='finalcgv.gv')
+c = Digraph('idealcgv', filename='idealcgv.gv')
 
 # legend
 c0 = Digraph('cluster_0')

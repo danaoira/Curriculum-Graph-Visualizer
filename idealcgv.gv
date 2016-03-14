@@ -1,4 +1,4 @@
-digraph finalcgv {
+digraph idealcgv {
 	node [color=grey style=filled]
 	"MATH 150A"
 	"MATH 270A"
