@@ -6,6 +6,7 @@ c = Digraph('finalcgv', filename='finalcgv.gv')
 
 # legend
 c0 = Digraph('cluster_0')
+c0.body.append('label = "LEGEND"')
 c0.body.append('color=lightgrey')
 c0.node_attr.update(style='filled', color='white')
 c0.edge_attr.update(color='white')
@@ -25,10 +26,10 @@ c0.edge('Semester 3', 'Semester 4')
 c0.edge('Semester 4', 'Semester 5')
 c0.edge('Completed', 'Semester 1')
 c0.edge('Semester 1', 'Semester 2')
-c0.body.append('label = "LEGEND"')
 
 # science and math electives
 c1 = Digraph('cluster_1')
+c1.body.append('label = "Science and Math Electives"')
 c1.body.append('color=aliceblue')
 c1.body.append('style=filled')
 c1.edge('MATH 150A', 'MATH 250A')
@@ -38,16 +39,15 @@ c1.edge('PHYS 225', 'PHYS 226')
 c1.edge('PHYS 226', 'PHYS 226L')
 c1.node('MATH 250A')
 c1.node('MATH 338')
-c1.body.append('label = "Science and Math Electives"')
 
 # IE track
 c2 = Digraph('cluster_2')
+c2.body.append('label = "Internet & Enterprise Computing (IE) Track"')
 c2.body.append('color=aliceblue')
 c2.body.append('style=filled')
 c2.node('CPSC 431')
 c2.node('CPSC 473')
 c2.node('CPSC 476')
-c2.body.append('label = "IE Track"')
 
 # coloring for completed courses
 c.attr('node', style='filled', color='grey')
@@ -71,7 +71,7 @@ c.attr('node', style='filled', color='peachpuff')
 c.node('MATH 250A')
 c.node('CPSC 240')
 c.node('CPSC 254')
-c.node('CPSC 223J')
+c.node('CPSC 223')
 c.node('CPSC 311')
 
 # semester 4 suggestion
@@ -140,6 +140,8 @@ c.edge('CPSC 351', 'CPSC 476')
 c.subgraph(c1)
 c.subgraph(c2)
 c.subgraph(c0)
+
+print(c.source)
 
 # a = 'label = "COMPLETED COURSES\nCPSC 121, MATH 150A, MATH 270A, ENGL 101"'
 

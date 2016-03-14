@@ -14,7 +14,7 @@ digraph finalcgv {
 	"MATH 250A"
 	"CPSC 240"
 	"CPSC 254"
-	"CPSC 223J"
+	"CPSC 223"
 	"CPSC 311"
 	node [color=darkseagreen style=filled]
 	"PHYS 225"
@@ -66,6 +66,7 @@ digraph finalcgv {
 		"CPSC 223" -> "CPSC 476"
 		"CPSC 351" -> "CPSC 476"
 	subgraph cluster_1 {
+	label = "Science and Math Electives"
 	color=aliceblue
 	style=filled
 			"MATH 150A" -> "MATH 250A"
@@ -75,19 +76,19 @@ digraph finalcgv {
 			"PHYS 226" -> "PHYS 226L"
 		"MATH 250A"
 		"MATH 338"
-	label = "Science and Math Electives"
 	}
 	subgraph cluster_2 {
+	label = "Internet & Enterprise Computing (IE) Track"
 	color=aliceblue
 	style=filled
 		"CPSC 431"
 		"CPSC 473"
 		"CPSC 476"
-	label = "IE Track"
 	}
 	subgraph cluster_0 {
 		node [color=white style=filled]
 		edge [color=white]
+		label = "LEGEND"
 		color=lightgrey
 			"Semester 6" [color=plum]
 			"Semester 7"
@@ -104,6 +105,5 @@ digraph finalcgv {
 				"Semester 4" -> "Semester 5"
 				Completed -> "Semester 1"
 				"Semester 1" -> "Semester 2"
-		label = "LEGEND"
 	}
 }
