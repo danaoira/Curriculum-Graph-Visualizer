@@ -3,6 +3,9 @@
 from graphviz import Digraph
 
 c = Digraph('idealcgv', filename='idealcgv.gv')
+c.attr('graph', fontname="Helvetica")
+c.attr('node', fontname="Helvetica")
+# c.attr('fontname="Arial"')
 
 # legend
 c0 = Digraph('cluster_0')
@@ -19,7 +22,6 @@ c0.node('Completed', color='grey')
 c0.node('Semester 1', color='pink')
 c0.node('Semester 2', color='lightsalmon')
 c0.node('Semester 8')
-
 c0.edge('Semester 6', 'Semester 7')
 c0.edge('Semester 7', 'Semester 8')
 c0.edge('Semester 3', 'Semester 4')
@@ -30,21 +32,22 @@ c0.edge('Semester 1', 'Semester 2')
 # science and math electives
 c1 = Digraph('cluster_1')
 c1.body.append('label = "Science and Math Electives"')
-c1.body.append('color=aliceblue')
-c1.body.append('style=filled')
-c1.edge('MATH 150A', 'MATH 250A')
+c1.body.append('color = aliceblue')
+c1.body.append('style = filled')
 c1.edge('MATH 150B', 'MATH 250A')
-c1.edge('PHYS 225', 'PHYS 225L')
+c1.edge('PHYS 225', 'PHYS 225L', '', arrowhead='dot', arrowtail='dot', dir='both')
 c1.edge('PHYS 225', 'PHYS 226')
-c1.edge('PHYS 226', 'PHYS 226L')
+c1.edge('PHYS 226', 'PHYS 226L', '', arrowhead='dot', arrowtail='dot', dir='both')
+c1.node('MATH 150A')
 c1.node('MATH 250A')
 c1.node('MATH 338')
 
 # IE track
 c2 = Digraph('cluster_2')
 c2.body.append('label = "Internet & Enterprise Computing (IE) Track"')
-c2.body.append('color=aliceblue')
-c2.body.append('style=filled')
+c2.body.append('labelloc = "b"')
+c2.body.append('color = aliceblue')
+c2.body.append('style = filled')
 c2.node('CPSC 431')
 c2.node('CPSC 473')
 c2.node('CPSC 476')
@@ -143,7 +146,4 @@ c.subgraph(c0)
 
 print(c.source)
 
-# a = 'label = "COMPLETED COURSES\nCPSC 121, MATH 150A, MATH 270A, ENGL 101"'
-
-# c.body.append(b)
 c.view()

@@ -1,4 +1,6 @@
 digraph idealcgv {
+	graph [fontname=Helvetica]
+	node [fontname=Helvetica]
 	node [color=grey style=filled]
 	"MATH 150A"
 	"MATH 270A"
@@ -67,20 +69,21 @@ digraph idealcgv {
 		"CPSC 351" -> "CPSC 476"
 	subgraph cluster_1 {
 	label = "Science and Math Electives"
-	color=aliceblue
-	style=filled
-			"MATH 150A" -> "MATH 250A"
+	color = aliceblue
+	style = filled
 			"MATH 150B" -> "MATH 250A"
-			"PHYS 225" -> "PHYS 225L"
+			"PHYS 225" -> "PHYS 225L" [label="" arrowhead=dot arrowtail=dot dir=both]
 			"PHYS 225" -> "PHYS 226"
-			"PHYS 226" -> "PHYS 226L"
+			"PHYS 226" -> "PHYS 226L" [label="" arrowhead=dot arrowtail=dot dir=both]
+		"MATH 150A"
 		"MATH 250A"
 		"MATH 338"
 	}
 	subgraph cluster_2 {
 	label = "Internet & Enterprise Computing (IE) Track"
-	color=aliceblue
-	style=filled
+	labelloc = "b"
+	color = aliceblue
+	style = filled
 		"CPSC 431"
 		"CPSC 473"
 		"CPSC 476"
