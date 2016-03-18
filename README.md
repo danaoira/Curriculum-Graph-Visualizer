@@ -6,9 +6,9 @@ Import a list of courses, select the elective track and completed courses to gen
 
 This program is created for [CPSC 597 Project](http://www.fullerton.edu/ecs/cs/_resources/pdf/CS_ProjGuidelines.pdf) to complete the M.S. Computer Science degree in Spring 2016.
 
-**Graduate Project Proposal**
-* Presentation: https://github.com/danaoira/Curriculum-Graph-Visualizer/blob/master/proposal/Proposal%20Presentation.pptx?raw=true
-* Report: https://github.com/danaoira/Curriculum-Graph-Visualizer/blob/master/proposal/Proposal%20Report.pdf
+## Graduate Project Proposal
+* [Presentation](https://github.com/danaoira/Curriculum-Graph-Visualizer/blob/master/proposal/Proposal%20Presentation.pptx?raw=true) for Graduate Seminar course
+* [Report](https://github.com/danaoira/Curriculum-Graph-Visualizer/blob/master/proposal/Proposal%20Report.pdf) submitted and approved to the CS department
 
 ## Links
 * GraphViz: http://www.graphviz.org/
