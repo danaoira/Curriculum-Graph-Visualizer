@@ -2,7 +2,7 @@
 
 from graphviz import Digraph
 
-c = Digraph('idealcgv', filename='idealcgv.gv')
+c = Digraph('test_ie', filename='test_ie.gv')
 c.attr('graph', fontname="Helvetica")
 c.attr('node', fontname="Helvetica")
 # c.attr('fontname="Arial"')
