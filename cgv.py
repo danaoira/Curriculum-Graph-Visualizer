@@ -111,9 +111,17 @@ for line in f:
 	# else:
 	# 	print(line, end='')
 
-print('\nALL COURSES:\n')
+print('\nAll courses in ' + str(core.name).upper() + ':\n')
+
+course_list = []
 for i in core.courses:
-	print(i)
+	if len(course_list) is not 6:
+		course_list.append(i)
+	else:
+		print('{0:10s} {1:10s} {2:10s} {3:10s} {4:10s} {5:10s}'.format(course_list[0], course_list[1], course_list[2], course_list[3], course_list[4], course_list[5]))
+		course_list = []
+
+print('\nInput courses completed, separated by commas (ex. CPSC 120, MATH 150A):')
 
 # convert to python graphviz
 
