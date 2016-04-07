@@ -4,7 +4,7 @@
 ## -> = prerequisite courses
 ## -- = corequisite courses
 
-## Title: Computer Science Undergraduate Curriculum
+## Major: Computer Science Undergraduate Curriculum
 
 # Major Prerequisite Tree [required]
 CPSC 120 -> CPSC 121 *
@@ -70,11 +70,11 @@ CPSC 483
 CPSC 485
 
 # Cybersecurity track
-CPSC 254 -> CPSC 353
-CPSC 351 -> CPSC 353
-CPSC 301 -> CPSC 452
-CPSC 351 -> CPSC 454
-CPSC 353 -> CPSC 454
-CPSC 351 -> CPSC 456
 CPSC 131 -> CPSC 439
+CPSC 254 -> CPSC 353
+CPSC 301 -> CPSC 452
+CPSC 351 -> CPSC 353
+CPSC 351 -> CPSC 454
+CPSC 351 -> CPSC 456
+CPSC 353 -> CPSC 454
 MATH 270B -> CPSC 439
