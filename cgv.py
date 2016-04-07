@@ -49,6 +49,7 @@ class Node(object):
 courses = []
 tracks = []
 elective = 0
+completed = []
 
 for line in f:
 	if '## Major:' in line:
@@ -64,11 +65,13 @@ for line in f:
 	elif ('required' not in line) and ('#' in line):
 		tracks.append(line[2:-1])
 
+# print elective tracks
 for i, item in enumerate(tracks, start=1):
 	print('[' + str(i) + '] ' + item)
 
 print('\nSelect ONE elective track:')
 
+# user input for elective track
 try:
 	elective = int(input())
 except:
@@ -76,16 +79,55 @@ except:
 	elective = int(input())
 
 elective = tracks[elective-1]
-print(elective)
 
 f = open(sys.argv[1], 'r')
 
+# toggle to read courses for user's study plan
+read = False
+
+# read courses for user's study plan
 for line in f:
-	print(line)
-	# if 'required' in line:
-	# 	pass
-	# 	if '#' not in line:
-	# 		courses.append(re_courses.findall(line))
+	if ('required' in line) or (elective in line):
+		read = True
+	elif '#' in line:
+		read = False
+	elif read is True and re_courses.findall(line):
+		if re_courses.findall(line)[0] not in courses:
+			courses.append(re_courses.findall(line)[0])
+		try:
+			if re_courses.findall(line)[1] not in courses:
+				courses.append(re_courses.findall(line)[1])
+		except:
+			pass
+
+print('\nAll courses in ' + str(major) + ':')
+
+# print list of courses
+for i, item in enumerate(sorted(courses), start=0):
+	if i % 7 == 0:
+		print()
+	else:
+		print('{0:10s}'.format(item), end=' ')
+
+print('\n\nInput courses completed, type X to finish:\n')
+
+# handles course completed input
+def input_match(course):
+	for i in course:
+		if i in completed:
+			print('> repeat info: ' + str(i))
+		elif i in courses:
+			completed.append(i)
+		else:
+			print('> does not exist: ' + str(i))
+
+# course completed input & error check
+course_completed = re_courses.findall(input().upper())
+while len(course_completed) > 0:
+	input_match(course_completed)
+	course_completed = re_courses.findall(input().upper())
+
+print('Completed Courses: ' + str(completed))
 
 	# # # find title
 	# # if 'Title:' in line:
