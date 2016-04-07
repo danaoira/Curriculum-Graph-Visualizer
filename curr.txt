@@ -1,55 +1,80 @@
-# MAJOR: Computer Science Undergraduate Curriculum
+## KEY
+## * = priority courses
+## [required] = required tracks
+## -> = prerequisite courses
+## -- = corequisite courses
 
-# Major Prerequisite Tree
-"CPSC 120" -> "CPSC 121" [priority]
-"CPSC 121" -> "CPSC 131" [priority]
-"CPSC 131" -> "CPSC 223" [priority]
-"CPSC 131" -> "CPSC 240"
-"CPSC 131" -> "CPSC 254"
-"CPSC 131" -> "CPSC 311"
-"CPSC 131" -> "CPSC 332"
-"CPSC 240" -> "CPSC 440"
-"CPSC 254" -> "CPSC 301"
-"CPSC 254" -> "CPSC 351"
-"CPSC 301" -> "CPSC 323"
-"CPSC 301" -> "CPSC 335"
-"CPSC 301" -> "CPSC 362"
-"CPSC 311" -> "CPSC 315"
-"CPSC 311" -> "CPSC 362"
-"CPSC 335" -> "CPSC 481"
-"CPSC 351" -> "CPSC 471"
-"ENGL 101" -> "CPSC 311"
-"MATH 150A" -> "MATH 150B"
-"MATH 150B" -> "MATH 338"
-"MATH 270A" -> "CPSC 240"
-"MATH 270A" -> "MATH 270B"
-"MATH 270B" -> "CPSC 335"
-"MATH 338" -> "CPSC 335"
+## Title: Computer Science Undergraduate Curriculum
 
-# Science and Math Electives
-"MATH 150B" -> "MATH 250A"
-"PHYS 225" -- "PHYS 225L"
-"PHYS 225" -- "PHYS 226"
-"PHYS 226" -- "PHYS 226L"
-"MATH 150A"
-"MATH 250A"
-"MATH 338"
+# Major Prerequisite Tree [required]
+CPSC 120 -> CPSC 121 *
+CPSC 121 -> CPSC 131 *
+CPSC 131 -> CPSC 223 *
+CPSC 131 -> CPSC 240
+CPSC 131 -> CPSC 254
+CPSC 131 -> CPSC 311
+CPSC 131 -> CPSC 332
+CPSC 240 -> CPSC 440
+CPSC 254 -> CPSC 301
+CPSC 254 -> CPSC 351
+CPSC 301 -> CPSC 323
+CPSC 301 -> CPSC 335 *
+CPSC 301 -> CPSC 362
+CPSC 311 -> CPSC 315
+CPSC 311 -> CPSC 362
+CPSC 335 -> CPSC 481
+CPSC 351 -> CPSC 471
+ENGL 101 -> CPSC 311
+MATH 150A -> MATH 150B *
+MATH 150B -> MATH 338 *
+MATH 270A -> CPSC 240
+MATH 270A -> MATH 270B *
+MATH 270B -> CPSC 335 *
+MATH 338 -> CPSC 335 *
 
-# Internet & Enterprise Computing (IE) track
-"CPSC 332" -> "CPSC 431"
-"CPSC 332" -> "CPSC 473"
-"CPSC 223" -> "CPSC 476"
-"CPSC 351" -> "CPSC 476"
+# Science and Math Electives [required]
+MATH 150B -> MATH 250A
+PHYS 225 -- PHYS 225L
+PHYS 225 -- PHYS 226
+PHYS 226 -- PHYS 226L
+MATH 150A
+MATH 250A
+MATH 338
+
+# Internet & Enterprise Computing (IE)
+CPSC 332 -> CPSC 431
+CPSC 332 -> CPSC 473
+CPSC 223 -> CPSC 476
+CPSC 351 -> CPSC 476
 
 # SC track
+MATH 340
+MATH 370
 
 # MG track
-"CPSC 131" -> "CPSC 386"
-"MATH 150B" -> "CPSC 484"
-"MATH 270B" -> "CPSC 484"
+CPSC 131 -> CPSC 386
+CPSC 386 -> CPSC 486
+CPSC 484 -> CPSC 486
+CPSC 486 -> CPSC 489
+MATH 150B -> CPSC 484
+MATH 270B -> CPSC 484
 
 # SE track
+CPSC 362 -> CPSC 462
+CPSC 362 -> CPSC 464
+CPSC 362 -> CPSC 463
+CPSC 466
 
 # Bioinformatics track
+CPSC 483
+CPSC 485
 
 # Cybersecurity track
+CPSC 254 -> CPSC 353
+CPSC 351 -> CPSC 353
+CPSC 301 -> CPSC 452
+CPSC 351 -> CPSC 454
+CPSC 353 -> CPSC 454
+CPSC 351 -> CPSC 456
+CPSC 131 -> CPSC 439
+MATH 270B -> CPSC 439
