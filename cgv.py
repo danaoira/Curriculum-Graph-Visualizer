@@ -48,8 +48,8 @@ class Node(object):
 
 courses = []
 tracks = []
-elective = 0
 completed = []
+elective = 0
 
 for line in f:
 	if '## Major:' in line:
@@ -69,13 +69,13 @@ for line in f:
 for i, item in enumerate(tracks, start=1):
 	print('[' + str(i) + '] ' + item)
 
-print('\nSelect ONE elective track:')
+print('\nPlease select ONE elective track:', end=' ')
 
 # user input for elective track
 try:
 	elective = int(input())
 except:
-	print('\nInvalid input, please try again:')
+	print('\nInvalid input, please try again:', end=' ')
 	elective = int(input())
 
 elective = tracks[elective-1]
@@ -100,88 +100,40 @@ for line in f:
 		except:
 			pass
 
-print('\nAll courses in ' + str(major) + ':')
+print('\nAll courses in ' + str(major) + ':\n')
 
 # print list of courses
-for i, item in enumerate(sorted(courses), start=0):
-	if i % 7 == 0:
-		print()
-	else:
-		print('{0:10s}'.format(item), end=' ')
+def courses_table(courses):
+	for i, item in enumerate(sorted(courses), start=1):
+		if i % 7 == 0:
+			print()
+		else:
+			print('{:10s}'.format(item), end=' ')
 
-print('\n\nInput courses completed, type X to finish:\n')
+courses_table(courses)
+
+print('\n\nInput courses completed:\n')
 
 # handles course completed input
 def input_match(course):
 	for i in course:
 		if i in completed:
-			print('> repeat info: ' + str(i))
+			print('> Repeat info: ' + str(i))
 		elif i in courses:
 			completed.append(i)
 		else:
-			print('> does not exist: ' + str(i))
+			print('> Does not exist: ' + str(i))
 
 # course completed input & error check
 course_completed = re_courses.findall(input().upper())
+if len(course_completed) == 0:
+	print('> Invalid input, please try again')
+	course_completed = re_courses.findall(input().upper())
 while len(course_completed) > 0:
 	input_match(course_completed)
 	course_completed = re_courses.findall(input().upper())
 
-print('Completed Courses: ' + str(completed))
-
-	# # # find title
-	# # if 'Title:' in line:
-	# # 	print(line.split('# Title: ')[1])
-	# # 	# cgv.set_name = line[9:]
-	# # # find tracks
-	# # if '#' in line:
-	# # 	pass
-
-	# # # find tracks
-	# # if line.find('#') == 0:
-	# # 	print(line, end='')
-
-	# # find nodes or edges
-	# if '->' in line:
-	# 	mpt.add_prereq(re_courses.findall(line)[0], re_courses.findall(line)[1])
-	# elif '--' in line:
-	# 	mpt.add_coreq(re_courses.findall(line)[0], re_courses.findall(line)[1])
-	# elif line == '\n':
-	# 	continue
-	# # else:
-	# # 	print('node')
-	# # else:
-	# # 	print(line, end='')
-
-# print('\nAll courses in ' + str(mpt.name).upper() + ':')
-
-# # print list of courses
-# for i, item in enumerate(sorted(mpt.courses), start=0):
-# 	if i % 7 == 0:
-# 		print()
-# 	else:
-# 		print('{0:10s}'.format(item), end=' ')
-
-# print('\n\nInput courses completed, type X to finish:\n')
-
-# # handles course completed input
-# def input_match(course):
-# 	for i in course:
-# 		if i in cgv.completed:
-# 			print('> repeat info: ' + str(i))
-# 		elif i in mpt.courses:
-# 			cgv.add_completed(i)
-# 		else:
-# 			print('> does not exist: ' + str(i))
-
-# # course completed input & error check
-# course_completed = re_courses.findall(input().upper())
-# while len(course_completed) > 0:
-# 	input_match(course_completed)
-# 	course_completed = re_courses.findall(input().upper())
-
-# print('Completed Courses: ' + str(cgv.completed))
-
+print('Generating study plan.')
 # convert to python graphviz
 
 # generate graph
