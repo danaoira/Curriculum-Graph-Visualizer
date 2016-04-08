@@ -4,31 +4,7 @@ import sys
 import re
 import graphviz
 
-# create new python file
-	# python filename: YYYYMMDD_computer_science.py
-	# graphviz filename: YYYYMMDD_computer_science.gv
-
-# write header info
-# print('''# finalmpt.py - Curriculum Graph Visualizer''')
-# print('''from graphviz import Digraph
-
-# c = Digraph('test_ie', filename='test_ie.gv')
-# c.attr('graph', fontname="Helvetica")
-# c.attr('node', fontname="Helvetica")''')
-
-# write legend
-# write elective track
-# write completed courses
-# write suggestion 1 to n
-# write major prerequisite tree
-# write elective track's prerequisite associations
-# write science/math elective subgraph print
-# write legend print
-# write view graph
-
-# read in .dot file
-
-re_courses = re.compile('\w+\s\d+\w*')
+re_courses = re.compile('\w+\s\d+\w*')	# regex for courses
 
 f = open(sys.argv[1], 'r')
 
@@ -75,7 +51,7 @@ print('\nPlease select ONE elective track:', end=' ')
 try:
 	elective = int(input())
 except:
-	print('\nInvalid input, please try again:', end=' ')
+	print('\n> Invalid input, please try again:', end=' ')
 	elective = int(input())
 
 elective = tracks[elective-1]
@@ -127,7 +103,7 @@ def input_match(course):
 # course completed input & error check
 course_completed = re_courses.findall(input().upper())
 if len(course_completed) == 0:
-	print('> Invalid input, please try again')
+	print('> Invalid input, please try again:')
 	course_completed = re_courses.findall(input().upper())
 while len(course_completed) > 0:
 	input_match(course_completed)
