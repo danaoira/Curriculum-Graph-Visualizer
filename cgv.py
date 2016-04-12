@@ -27,17 +27,19 @@ class Node:
 	def get_child(self):
 		return self.children
 
-f = open('studyplan.py', 'w')
-f.write('from graphviz import Digraph\n')
-f.write("c = Digraph('studyplan', filename='studyplan.gv')\n")
-f.write('c.node("A")\n')
-f.write('c.view()')
+nf = open('studyplan.py', 'w')
+
+nf_header = r'''from graphviz import Digraph
+c = Digraph('studyplan', filename='studyplan.gv')'''
+
+nf.write(nf_header + '\n')
+nf.write('c.node("A")\n')
+nf.write('c.view()')
 
 print('finished creating study plan')
 print('opening study plan')
 
 os.startfile('studyplan.py')
-
 
 from graphviz import Digraph
 
