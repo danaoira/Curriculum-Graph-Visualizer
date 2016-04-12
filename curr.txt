@@ -6,6 +6,10 @@
 
 ## Major: Computer Science Undergraduate Curriculum
 
+## Units
+CPSC = 3
+MATH = 4
+
 # Major Prerequisite Tree [required]
 CPSC 120 -> CPSC 121 *
 CPSC 121 -> CPSC 131 *
