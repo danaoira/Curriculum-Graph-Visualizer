@@ -27,13 +27,64 @@ class Node:
 	def get_child(self):
 		return self.children
 
-nf = open('studyplan.py', 'w')
+class StudyPlan:
 
-nf_header = r'''from graphviz import Digraph
+	def __init__(self):
+		self.header = r'''from graphviz import Digraph
 c = Digraph('studyplan', filename='studyplan.gv')'''
+		self.legend = r'''c0 = Digraph('cluster_0')
+c0.body.append('color=lightgrey')
+c0.node_attr.update(style='filled', color='white')
+c0.edge_attr.update(color='white')
+c0.node('Semester 6', color='plum')
+c0.node('Semester 7')
+c0.node('Semester 3', color='peachpuff')
+c0.node('Semester 4', color='darkseagreen')
+c0.node('Semester 5', color='lightblue')
+c0.node('Completed', color='grey')
+c0.node('Semester 1', color='pink')
+c0.node('Semester 2', color='lightsalmon')
+c0.node('Semester 8')
+c0.edge('Semester 6', 'Semester 7')
+c0.edge('Semester 7', 'Semester 8')
+c0.edge('Semester 3', 'Semester 4')
+c0.edge('Semester 4', 'Semester 5')
+c0.edge('Completed', 'Semester 1')
+c0.edge('Semester 1', 'Semester 2')
+c0.body.append('label = "LEGEND"')
+'''
+		self.req_electives = ''
+		self.trk_electives = ''
+		self.completed = ''
+		self.suggestions = ''
+		self.major_tree = ''
+		self.elec_prereqs = ''
 
-nf.write(nf_header + '\n')
+	def make_node(L):
+		pass
+
+	def make_edge(L):
+		pass
+
+# c1 = Digraph('cluster_1')
+# c1.body.append('color=aliceblue')
+# c1.body.append('style=filled')
+# c1.edge('MATH 150A', 'MATH 250A')
+# c1.edge('MATH 150B', 'MATH 250A')
+# c1.edge('PHYS 225', 'PHYS 225L')
+# c1.edge('PHYS 225', 'PHYS 226')
+# c1.edge('PHYS 226', 'PHYS 226L')
+# c1.node('MATH 250A')
+# c1.node('MATH 338')
+# c1.body.append('label = "Science and Math Electives"')
+
+nf = open('studyplan.py', 'w')
+sp = StudyPlan()
+
+nf.write(sp.header + '\n')
+nf.write(sp.legend + '\n')
 nf.write('c.node("A")\n')
+nf.write('c.subgraph(c0)\n')
 nf.write('c.view()')
 
 print('finished creating study plan')
