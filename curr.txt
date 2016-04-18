@@ -10,7 +10,7 @@
 CPSC = 3
 MATH = 4
 
-# Major Prerequisite Tree [required]
+# Core Courses [required]
 CPSC 120 -> CPSC 121 *
 CPSC 121 -> CPSC 131 *
 CPSC 131 -> CPSC 223 *
@@ -51,11 +51,11 @@ CPSC 332 -> CPSC 473
 CPSC 223 -> CPSC 476
 CPSC 351 -> CPSC 476
 
-# SC track
+# Scientific Computuing (SC) track
 MATH 340
 MATH 370
 
-# MG track
+# Multimedia and Digital Games (MG) track
 CPSC 131 -> CPSC 386
 CPSC 386 -> CPSC 486
 CPSC 484 -> CPSC 486
@@ -63,17 +63,17 @@ CPSC 486 -> CPSC 489
 MATH 150B -> CPSC 484
 MATH 270B -> CPSC 484
 
-# SE track
+# Software Engineering (SE) track
 CPSC 362 -> CPSC 462
 CPSC 362 -> CPSC 464
 CPSC 362 -> CPSC 463
 CPSC 466
 
-# Bioinformatics track
+# Bioinformatics (Bio) track
 CPSC 483
 CPSC 485
 
-# Cybersecurity track
+# Cybersecurity (CySec) track
 CPSC 131 -> CPSC 439
 CPSC 254 -> CPSC 353
 CPSC 301 -> CPSC 452
