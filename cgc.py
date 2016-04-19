@@ -31,18 +31,25 @@ c0.edge('Completed', 'Semester 1')
 c0.edge('Semester 1', 'Semester 2')
 c0.body.append('label = "LEGEND"')
 '''
-req_electives = ''
-trk_electives = ''
+req_electives = r'''c1 = Digraph('cluster_1')
+c1.body.append('color=aliceblue')
+c1.body.append('style=filled')'''
+req_electives_footer = "c1.body.append('label = \""
+trk_electives = r'''
+c2 = Digraph('cluster_2')
+c2.body.append('color=aliceblue')
+c2.body.append('style=filled')'''
+trk_electives_footer = "c2.body.append('label = \""
 completed_courses = ''
 suggestions = ''
 core_courses = ''
 elec_prereq = ''
 
 def prereq_edge(node1, node2):
-	return "g.edge('" + node1 + "', '" + node2 + "')\n"
+	return ".edge('" + node1 + "', '" + node2 + "')\n"
 
 def coreq_edge(node1, node2):
-	return "g.edge('" + node1 + "', '" + node2 + "', '', arrowhead='dot', arrowtail='dot', dir='both')\n"
+	return ".edge('" + node1 + "', '" + node2 + "', '', arrowhead='dot', arrowtail='dot', dir='both')\n"
 
 f = open(sys.argv[1], 'r')
 nf = open('studyplan.py', 'w')
@@ -51,25 +58,50 @@ write_to = ''
 for line in f:
 	if ('#' in line.split(' ')) and ('Core' in line):
 		write_to = 'core'
-		core_courses = core_courses + line
-		continue
-	elif ('#' in line.split(' ')):
+		core_courses = core_courses + '\n' + line
+	elif ('#' in line.split(' ')) and ('required' in line):
+		write_to = 'req_electives'
+		req_electives = req_electives + '\n' + line
+		req_electives_footer = req_electives_footer + line[2:-1] + "\"')"
+	elif ('#' in line.split(' ')) and ('IE' in line):
+		write_to = 'trk_electives'
+		trk_electives = trk_electives + '\n' + line
+		trk_electives_footer = trk_electives_footer + line[2:-1] + "\"')"
+	elif line is '\n':
 		write_to = ''
-	if write_to == 'core':
+	if write_to is 'core':
 		course = re_courses.findall(line)
 		if (course) and ('->' in line):
-			core_courses = core_courses + prereq_edge(course[0], course[1])
+			core_courses = core_courses + 'g' + prereq_edge(course[0], course[1])
 		elif (course) and ('--' in line):
-			core_courses = core_courses + coreq_edge(course[0], course[1])
+			core_courses = core_courses + 'g' + coreq_edge(course[0], course[1])
+	elif write_to is 'req_electives':
+		course = re_courses.findall(line)
+		if (course) and ('->' in line):
+			req_electives = req_electives + 'c1' + prereq_edge(course[0], course[1])
+		elif (course) and ('--' in line):
+			req_electives = req_electives + 'c1' + coreq_edge(course[0], course[1])
+	elif write_to is 'trk_electives':
+		course = re_courses.findall(line)
+		if (course) and ('->' in line):
+			trk_electives = trk_electives + 'c2' + prereq_edge(course[0], course[1])
+		elif (course) and ('--' in line):
+			trk_electives = trk_electives + 'c2' + coreq_edge(course[0], course[1])
 	else:
 		pass
 
-
-# major prerequisite tree
-# c.edge('CPSC 120', 'CPSC 121')
-# c.edge('CPSC 121', 'CPSC 131')
-
 nf.write(header + '\n')
-nf.write(core_courses)
+nf.write(legend + '\n')
+nf.write(req_electives + '\n')
+nf.write(req_electives_footer + '\n')
+nf.write(trk_electives + '\n')
+nf.write(trk_electives_footer + '\n')
+# write course suggestions
+nf.write(core_courses + '\n')
+# write track prerequisites
+# write subgraph calls
+nf.write('g.subgraph(c1)' + '\n')
+nf.write('g.subgraph(c2)' + '\n')
 nf.write('g.view()')
+
 os.startfile('studyplan.py')
