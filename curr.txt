@@ -45,7 +45,7 @@ MATH 150A
 MATH 250A
 MATH 338
 
-# Internet & Enterprise Computing (IE)
+# Internet & Enterprise (IE) Computing
 CPSC 332 -> CPSC 431
 CPSC 332 -> CPSC 473
 CPSC 223 -> CPSC 476
