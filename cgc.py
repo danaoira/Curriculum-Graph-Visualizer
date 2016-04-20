@@ -45,11 +45,17 @@ suggestions = ''
 core_courses = ''
 elec_prereq = ''
 
-def prereq_edge(node1, node2):
-	return ".edge('" + node1 + "', '" + node2 + "')\n"
+def prereq_edge(node1, node2, crit):
+	if crit is True:
+		return ".edge('" + node1 + "', '" + node2 + "', color='red')\n"
+	else:
+		return ".edge('" + node1 + "', '" + node2 + "')\n"
 
-def coreq_edge(node1, node2):
-	return ".edge('" + node1 + "', '" + node2 + "', '', arrowhead='dot', arrowtail='dot', dir='both')\n"
+def coreq_edge(node1, node2, crit):
+	if crit is True:
+		return ".edge('" + node1 + "', '" + node2 + "', '', arrowhead='dot', arrowtail='dot', dir='both', color='red')\n"
+	else:
+		return ".edge('" + node1 + "', '" + node2 + "', '', arrowhead='dot', arrowtail='dot', dir='both')\n"
 
 f = open(sys.argv[1], 'r')
 nf = open('studyplan.py', 'w')
@@ -71,22 +77,26 @@ for line in f:
 		write_to = ''
 	if write_to is 'core':
 		course = re_courses.findall(line)
-		if (course) and ('->' in line):
-			core_courses = core_courses + 'g' + prereq_edge(course[0], course[1])
+		if (course) and ('->' in line) and ('*' in line):
+			core_courses = core_courses + 'g' + prereq_edge(course[0], course[1], True)
+		elif (course) and ('--' in line) and ('*' in line):
+			core_courses = core_courses + 'g' + coreq_edge(course[0], course[1], True)
+		elif (course) and ('->' in line):
+			core_courses = core_courses + 'g' + prereq_edge(course[0], course[1], False)
 		elif (course) and ('--' in line):
-			core_courses = core_courses + 'g' + coreq_edge(course[0], course[1])
+			core_courses = core_courses + 'g' + coreq_edge(course[0], course[1], False)
 	elif write_to is 'req_electives':
 		course = re_courses.findall(line)
 		if (course) and ('->' in line):
-			req_electives = req_electives + 'c1' + prereq_edge(course[0], course[1])
+			req_electives = req_electives + 'c1' + prereq_edge(course[0], course[1], False)
 		elif (course) and ('--' in line):
-			req_electives = req_electives + 'c1' + coreq_edge(course[0], course[1])
+			req_electives = req_electives + 'c1' + coreq_edge(course[0], course[1], False)
 	elif write_to is 'trk_electives':
 		course = re_courses.findall(line)
 		if (course) and ('->' in line):
-			trk_electives = trk_electives + 'c2' + prereq_edge(course[0], course[1])
+			trk_electives = trk_electives + 'c2' + prereq_edge(course[0], course[1], False)
 		elif (course) and ('--' in line):
-			trk_electives = trk_electives + 'c2' + coreq_edge(course[0], course[1])
+			trk_electives = trk_electives + 'c2' + coreq_edge(course[0], course[1], False)
 	else:
 		pass
 
