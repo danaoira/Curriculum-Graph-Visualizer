@@ -45,6 +45,9 @@ suggestions = ''
 core_courses = ''
 elec_prereq = ''
 
+def node(value):
+	return ".node('" + value + "')\n"
+
 def prereq_edge(node1, node2, crit):
 	if crit is True:
 		return ".edge('" + node1 + "', '" + node2 + "', color='red')\n"
@@ -85,18 +88,25 @@ for line in f:
 			core_courses = core_courses + 'g' + prereq_edge(course[0], course[1], False)
 		elif (course) and ('--' in line):
 			core_courses = core_courses + 'g' + coreq_edge(course[0], course[1], False)
+		elif (course):
+			print(line)
+			core_courses = core_courses + 'g' + node(course[0])
 	elif write_to is 'req_electives':
 		course = re_courses.findall(line)
 		if (course) and ('->' in line):
 			req_electives = req_electives + 'c1' + prereq_edge(course[0], course[1], False)
 		elif (course) and ('--' in line):
 			req_electives = req_electives + 'c1' + coreq_edge(course[0], course[1], False)
+		elif (course):
+			req_electives = req_electives + 'c1' + node(course[0])
 	elif write_to is 'trk_electives':
 		course = re_courses.findall(line)
 		if (course) and ('->' in line):
 			trk_electives = trk_electives + 'c2' + prereq_edge(course[0], course[1], False)
 		elif (course) and ('--' in line):
 			trk_electives = trk_electives + 'c2' + coreq_edge(course[0], course[1], False)
+		elif (course):
+			trk_electives = trk_electives + 'c2' + node(course[0])
 	else:
 		pass
 
