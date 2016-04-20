@@ -33,12 +33,16 @@ c0.body.append('label = "LEGEND"')
 '''
 req_electives = r'''c1 = Digraph('cluster_1')
 c1.body.append('color=aliceblue')
-c1.body.append('style=filled')'''
+c1.body.append('style=filled')
+c1.body.append('labelloc = "b"')
+c1.body.append('label = "'''
 req_electives_footer = "c1.body.append('label = \""
 trk_electives = r'''
 c2 = Digraph('cluster_2')
 c2.body.append('color=aliceblue')
-c2.body.append('style=filled')'''
+c2.body.append('style=filled')
+c2.body.append('labelloc = "b"')
+c2.body.append('label = "'''
 trk_electives_footer = "c2.body.append('label = \""
 completed_courses = ''
 suggestions = ''
@@ -70,12 +74,10 @@ for line in f:
 		core_courses = core_courses + '\n' + line
 	elif ('#' in line.split(' ')) and ('required' in line):
 		write_to = 'req_electives'
-		req_electives = req_electives + '\n' + line
-		req_electives_footer = req_electives_footer + line[2:-1] + "\"')"
+		req_electives = req_electives + line[2:-1] + '"\')\n' 
 	elif ('#' in line.split(' ')) and ('IE' in line):
 		write_to = 'trk_electives'
-		trk_electives = trk_electives + '\n' + line
-		trk_electives_footer = trk_electives_footer + line[2:-1] + "\"')"
+		trk_electives = trk_electives + line[2:-1] + '"\')\n'
 	elif line is '\n':
 		write_to = ''
 	if write_to is 'core':
@@ -113,9 +115,7 @@ for line in f:
 nf.write(header + '\n')
 nf.write(legend + '\n')
 nf.write(req_electives + '\n')
-nf.write(req_electives_footer + '\n')
 nf.write(trk_electives + '\n')
-nf.write(trk_electives_footer + '\n')
 # write course suggestions
 nf.write(core_courses + '\n')
 # write track prerequisites
