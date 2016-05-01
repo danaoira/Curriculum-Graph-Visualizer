@@ -1,4 +1,4 @@
-# mpt.py - Dana Toribio
+# cgv.py - Curriculum Graph Visualizer - Dana Toribio
 
 import graphviz
 import os
@@ -27,70 +27,10 @@ class Node:
 	def get_child(self):
 		return self.children
 
-class StudyPlan:
-
-	def __init__(self):
-		self.header = r'''from graphviz import Digraph
-c = Digraph('studyplan', filename='studyplan.gv')'''
-		self.legend = r'''c0 = Digraph('cluster_0')
-c0.body.append('color=lightgrey')
-c0.node_attr.update(style='filled', color='white')
-c0.edge_attr.update(color='white')
-c0.node('Semester 6', color='plum')
-c0.node('Semester 7')
-c0.node('Semester 3', color='peachpuff')
-c0.node('Semester 4', color='darkseagreen')
-c0.node('Semester 5', color='lightblue')
-c0.node('Completed', color='grey')
-c0.node('Semester 1', color='pink')
-c0.node('Semester 2', color='lightsalmon')
-c0.node('Semester 8')
-c0.edge('Semester 6', 'Semester 7')
-c0.edge('Semester 7', 'Semester 8')
-c0.edge('Semester 3', 'Semester 4')
-c0.edge('Semester 4', 'Semester 5')
-c0.edge('Completed', 'Semester 1')
-c0.edge('Semester 1', 'Semester 2')
-c0.body.append('label = "LEGEND"')
-'''
-		self.req_electives = ''
-		self.trk_electives = ''
-		self.completed = ''
-		self.suggestions = ''
-		self.major_tree = ''
-		self.elec_prereqs = ''
-
-	def make_node(L):
-		pass
-
-	def make_edge(L):
-		pass
-
-# c1 = Digraph('cluster_1')
-# c1.body.append('color=aliceblue')
-# c1.body.append('style=filled')
-# c1.edge('MATH 150A', 'MATH 250A')
-# c1.edge('MATH 150B', 'MATH 250A')
-# c1.edge('PHYS 225', 'PHYS 225L')
-# c1.edge('PHYS 225', 'PHYS 226')
-# c1.edge('PHYS 226', 'PHYS 226L')
-# c1.node('MATH 250A')
-# c1.node('MATH 338')
-# c1.body.append('label = "Science and Math Electives"')
-
-nf = open('studyplan.py', 'w')
-sp = StudyPlan()
-
-nf.write(sp.header + '\n')
-nf.write(sp.legend + '\n')
-nf.write('c.node("A")\n')
-nf.write('c.subgraph(c0)\n')
-nf.write('c.view()')
+nf = open('studyplan.txt', 'w')
 
 print('finished creating study plan')
 print('opening study plan')
-
-os.startfile('studyplan.py')
 
 from graphviz import Digraph
 
@@ -127,97 +67,119 @@ c = Digraph('finalcgv', filename='finalcgv.gv')
 # 			for k in j.children:
 # 				print(str(j.data) + ' -> ' + str(k.data))
 
-
 #################################
 
-# courses = []
-# tracks = []
-# completed = []
-# elective = 0
+courses = []
+tracks = []
+completed = []
+elective = 0
 
-# for line in f:
-# 	if '## Major:' in line:
-# 		major = line[10:-1]
-# 		break
+track_hash = {}
 
-# print('\nAll elective tracks in ' + str(major) + ':\n')
+for line in f:
+	if '## Major:' in line:
+		major = line[10:-1]
+		break
 
-# # find elective tracks
-# for line in f:
-# 	if '##' in line:
-# 		pass
-# 	elif ('required' not in line) and ('#' in line):
-# 		tracks.append(line[2:-1])
+print('\nAll elective tracks in ' + str(major) + ':\n')
 
-# # print elective tracks
-# for i, item in enumerate(tracks, start=1):
-# 	print('[' + str(i) + '] ' + item)
+# find elective tracks
+for line in f:
+	if '##' in line:
+		pass
+	elif ('required' not in line) and ('#' in line):
+		tracks.append(line[2:-1])
 
-# print('\nPlease select ONE elective track:', end=' ')
+# print elective tracks
+for i, item in enumerate(tracks, start=1):
+	print('[' + str(i) + '] ' + item)
 
-# # user input for elective track
-# try:
-# 	elective = int(input())
-# except:
-# 	print('\n> Invalid input, please try again:', end=' ')
-# 	elective = int(input())
+print('\nPlease select ONE elective track:', end=' ')
 
-# elective = tracks[elective-1]
+# user input for elective track
+try:
+	elective = int(input())
+except:
+	print('\n> Invalid input, please try again:', end=' ')
+	elective = int(input())
 
-# f = open(sys.argv[1], 'r')
+elective = tracks[elective-1]
 
-# # toggle to read courses for user's study plan
-# read = False
+f = open(sys.argv[1], 'r')
 
-# # read courses for user's study plan
-# for line in f:
-# 	if ('required' in line) or (elective in line):
-# 		read = True
-# 	elif '#' in line:
-# 		read = False
-# 	elif read is True and re_courses.findall(line):
-# 		if re_courses.findall(line)[0] not in courses:
-# 			courses.append(re_courses.findall(line)[0])
-# 		try:
-# 			if re_courses.findall(line)[1] not in courses:
-# 				courses.append(re_courses.findall(line)[1])
-# 		except:
-# 			pass
+# toggle to read courses for user's study plan
+read = False
 
-# print('\nAll courses in ' + str(major) + ':\n')
+# read courses for user's study plan
+track_hash_key = ''
+track_hash_value = ''
+for line in f:
+	if '##' in line:
+		pass
+	elif ('required' in line) or (elective in line):
+		if track_hash_key is not '':
+			track_hash[track_hash_key] = track_hash_value
+			nf.write(track_hash_key)
+			nf.write(track_hash[track_hash_key] + '\n')
+			track_hash_key = ''
+			track_hash_value = ''
+		read = True
+		track_hash[line] = ''
+		track_hash_key = line
+	elif '#' in line:
+		if track_hash_key is not '':
+			track_hash[track_hash_key] = track_hash_value
+			nf.write(track_hash_key)
+			nf.write(track_hash[track_hash_key] + '\n')
+			track_hash_key = ''
+			track_hash_value = ''
+		read = False
+	elif read is True and re_courses.findall(line):
+		track_hash_value = track_hash_value + line
+		if re_courses.findall(line)[0] not in courses:
+			courses.append(re_courses.findall(line)[0])
+		try:
+			if re_courses.findall(line)[1] not in courses:
+				courses.append(re_courses.findall(line)[1])
+		except:
+			pass
 
-# # print list of courses
-# def courses_table(courses):
-# 	for i, item in enumerate(sorted(courses), start=1):
-# 		if i % 7 == 0:
-# 			print()
-# 		else:
-# 			print('{:10s}'.format(item), end=' ')
+print('\nAll courses in ' + str(major) + ':\n')
 
-# courses_table(courses)
+# print list of courses
+def courses_table(courses):
+	for i, item in enumerate(sorted(courses), start=1):
+		if i % 7 == 0:
+			print()
+		else:
+			print('{:10s}'.format(item), end=' ')
 
-# print('\n\nInput courses completed:\n')
+courses_table(courses)
 
-# # handles course completed input
-# def input_match(course):
-# 	for i in course:
-# 		if i in completed:
-# 			print('> Repeat info: ' + str(i))
-# 		elif i in courses:
-# 			completed.append(i)
-# 		else:
-# 			print('> Does not exist: ' + str(i))
+print('\n\nInput courses completed:\n')
 
-# # course completed input & error check
-# course_completed = re_courses.findall(input().upper())
-# if len(course_completed) == 0:
-# 	print('> Invalid input, please try again:')
-# 	course_completed = re_courses.findall(input().upper())
-# while len(course_completed) > 0:
-# 	input_match(course_completed)
-# 	course_completed = re_courses.findall(input().upper())
+# handles course completed input
+def input_match(course):
+	for i in course:
+		if i in completed:
+			print('> Repeat info: ' + str(i))
+		elif i in courses:
+			completed.append(i)
+		else:
+			print('> Does not exist: ' + str(i))
 
-# print('Generating study plan.')
-# # convert to python graphviz
+# course completed input & error check
+course_completed = re_courses.findall(input().upper())
+if len(course_completed) == 0:
+	print('> Invalid input, please try again:')
+	course_completed = re_courses.findall(input().upper())
+while len(course_completed) > 0:
+	input_match(course_completed)
+	course_completed = re_courses.findall(input().upper())
 
-# # generate graph
+print('Generating study plan.')
+# convert to python graphviz
+
+os.startfile('cgc.py', 'studyplan.txt')
+
+# generate graph
