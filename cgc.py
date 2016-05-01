@@ -9,8 +9,11 @@ import sys
 re_courses = re.compile('\w+\s\d+\w*')	# regex for courses
 
 header = r'''from graphviz import Digraph
-g = Digraph('studyplan', filename='studyplan.gv')'''
+g = Digraph('studyplan', filename='studyplan.gv')
+g.attr('graph', fontname='Helvetica')
+g.attr('node', fontname='Helvetica')'''
 legend = r'''c0 = Digraph('cluster_0')
+c0.body.append('label = "LEGEND"')
 c0.body.append('color=lightgrey')
 c0.node_attr.update(style='filled', color='white')
 c0.edge_attr.update(color='white')
@@ -119,9 +122,11 @@ nf.write(trk_electives + '\n')
 # write course suggestions
 nf.write(core_courses + '\n')
 # write track prerequisites
-# write subgraph calls
+
+# subgraph calls
 nf.write('g.subgraph(c1)' + '\n')
 nf.write('g.subgraph(c2)' + '\n')
+nf.write('g.subgraph(c0)' + '\n')
 nf.write('g.view()')
 
 os.startfile('studyplan.py')
