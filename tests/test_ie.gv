@@ -1,0 +1,75 @@
+digraph test_ie {
+	graph [fontname=Helvetica]
+	node [fontname=Helvetica]
+		"CPSC 120" -> "CPSC 121" [color=red]
+		"CPSC 121" -> "CPSC 131" [color=red]
+		"CPSC 131" -> "CPSC 223"
+		"CPSC 131" -> "CPSC 240"
+		"CPSC 131" -> "CPSC 254" [color=red]
+		"CPSC 131" -> "CPSC 311"
+		"CPSC 131" -> "CPSC 332"
+		"CPSC 240" -> "CPSC 440"
+		"CPSC 254" -> "CPSC 301" [color=red]
+		"CPSC 254" -> "CPSC 351"
+		"CPSC 301" -> "CPSC 323"
+		"CPSC 301" -> "CPSC 335" [color=red]
+		"CPSC 301" -> "CPSC 362"
+		"CPSC 311" -> "CPSC 315"
+		"CPSC 311" -> "CPSC 362"
+		"CPSC 335" -> "CPSC 481" [color=red]
+		"CPSC 351" -> "CPSC 471"
+		"ENGL 101" -> "CPSC 311"
+		"MATH 150A" -> "MATH 150B" [color=red]
+		"MATH 150B" -> "MATH 338" [color=red]
+		"MATH 270A" -> "CPSC 240"
+		"MATH 270A" -> "MATH 270B" [color=red]
+		"MATH 270B" -> "CPSC 335" [color=red]
+		"MATH 338" -> "CPSC 335" [color=red]
+		"CPSC 131" -> "CPSC 386"
+		"CPSC 150B" -> "CPSC 484"
+		"MATH 270B" -> "CPSC 484"
+	subgraph cluster_1 {
+	label = "Science and Math Electives"
+	color = aliceblue
+	style = filled
+			"MATH 150B" -> "MATH 250A"
+			"PHYS 225" -> "PHYS 225L" [label="" arrowhead=dot arrowtail=dot dir=both]
+			"PHYS 225" -> "PHYS 226"
+			"PHYS 226" -> "PHYS 226L" [label="" arrowhead=dot arrowtail=dot dir=both]
+		"MATH 150A"
+		"MATH 250A"
+		"MATH 338"
+	}
+	subgraph cluster_4 {
+	label = "Multimedia and Digital Games (MG) Track"
+	labelloc = "b"
+	color = aliceblue
+	style = filled
+			"CPSC 386" -> "CPSC 486"
+		"CPSC 484" [label="CPSC 486"]
+			"CPSC 486" -> "CPSC 489"
+		"Free Elective 1"
+	}
+	subgraph cluster_0 {
+		node [color=white style=filled]
+		edge [color=white]
+		label = "LEGEND"
+		color=lightgrey
+			"Semester 6" [color=plum]
+			"Semester 7"
+			"Semester 3" [color=peachpuff]
+			"Semester 4" [color=darkseagreen]
+			"Semester 5" [color=lightblue]
+			Completed [color=grey]
+			"Semester 1" [color=pink]
+			"Semester 2" [color=lightsalmon]
+			"Semester 8"
+				"Semester 6" -> "Semester 7"
+				"Semester 7" -> "Semester 8" [label="critical path" color=red]
+				"Semester 7" -> "Semester 8" [label=corequisite arrowhead=dot arrowtail=dot color=black dir=both]
+				"Semester 3" -> "Semester 4"
+				"Semester 4" -> "Semester 5"
+				Completed -> "Semester 1"
+				"Semester 1" -> "Semester 2"
+	}
+}
