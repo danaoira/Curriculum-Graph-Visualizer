@@ -67,6 +67,8 @@ except:
 
 elective = tracks[elective-1]
 
+f.seek(0)
+
 # toggle to read courses for user's study plan
 read = False
 
@@ -139,7 +141,7 @@ while len(course_completed) > 0:
 	input_match(course_completed)
 	course_completed = re_courses.findall(input().upper())
 
-# UPDATE STUDY PLAN TREE WITH COMPLETED COURSES
+# UPDATE STUDY PLAN TREE WITH COMPLETED
 # STUDY PLAN SUGGESTION OPERATION
 
 print('Generating study plan.')
