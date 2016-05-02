@@ -67,7 +67,7 @@ def coreq_edge(node1, node2, crit):
 	else:
 		return ".edge('" + node1 + "', '" + node2 + "', '', arrowhead='dot', arrowtail='dot', dir='both')\n"
 
-f = open('studyplan.txt', 'r')
+f = open(sys.argv[1], 'r')
 nf = open('studyplan.py', 'w')
 write_to = ''
 

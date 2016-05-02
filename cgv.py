@@ -3,6 +3,7 @@
 import graphviz
 import os
 import re
+# import subprocess
 import sys
 
 re_courses = re.compile('\w+\s\d+\w*')	# regex for courses
@@ -26,13 +27,14 @@ class Node:
 	def get_child(self):
 		return self.children
 
-	def create_root(self):
-		
-
 nf = open('studyplan.txt', 'w')
 
 print('finished creating study plan')
 print('opening study plan')
+
+from graphviz import Digraph
+
+c = Digraph('finalcgv', filename='finalcgv.gv')
 
 ################################################
 
@@ -178,6 +180,6 @@ while len(course_completed) > 0:
 print('Generating study plan.')
 # convert to python graphviz
 
-os.startfile('cgc.py')
+os.startfile('cgc.py', 'studyplan.txt')
 
 # generate graph
