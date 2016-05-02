@@ -3,7 +3,6 @@
 import graphviz
 import os
 import re
-# import subprocess
 import sys
 
 re_courses = re.compile('\w+\s\d+\w*')	# regex for courses
@@ -31,43 +30,6 @@ nf = open('studyplan.txt', 'w')
 
 print('finished creating study plan')
 print('opening study plan')
-
-from graphviz import Digraph
-
-c = Digraph('finalcgv', filename='finalcgv.gv')
-
-################################################
-
-# z = Node("ROOT")
-# a = Node("CPSC 120")
-# b = Node("CSPC 121")
-# c = Node("CPSC 131")
-# d = Node("CPSC 223")
-# e = Node("CPSC 240")
-# f = Node("CPSC 254")
-# g = Node("CPSC 311")
-# h = Node("CPSC 332")
-# z.add_child(a)
-# a.add_child(b)
-# b.add_child(c)
-# c.add_child(d)
-# c.add_child(e)
-# c.add_child(f)
-# c.add_child(g)
-# c.add_child(h)
-
-# print()
-
-# for c in z.children:
-# 	print(str(z.data) + ' -> ' + str(c.data))
-# 	for i in c.children:
-# 		print(str(c.data) + ' -> ' + str(i.data))
-# 		for j in i.children:
-# 			print(str(i.data) + ' -> ' + str(j.data))
-# 			for k in j.children:
-# 				print(str(j.data) + ' -> ' + str(k.data))
-
-#################################
 
 courses = []
 tracks = []
@@ -104,8 +66,6 @@ except:
 	elective = int(input())
 
 elective = tracks[elective-1]
-
-f = open(sys.argv[1], 'r')
 
 # toggle to read courses for user's study plan
 read = False
@@ -144,6 +104,8 @@ for line in f:
 		except:
 			pass
 
+# STUDY PLAN TREE OPERATION
+
 print('\nAll courses in ' + str(major) + ':\n')
 
 # print list of courses
@@ -177,9 +139,12 @@ while len(course_completed) > 0:
 	input_match(course_completed)
 	course_completed = re_courses.findall(input().upper())
 
+# UPDATE STUDY PLAN TREE WITH COMPLETED COURSES
+# STUDY PLAN SUGGESTION OPERATION
+
 print('Generating study plan.')
 # convert to python graphviz
 
-os.startfile('cgc.py', 'studyplan.txt')
+os.startfile('cgc.py')
 
 # generate graph
