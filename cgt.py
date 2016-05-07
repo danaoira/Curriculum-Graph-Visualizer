@@ -69,10 +69,21 @@ for line in f:
 # for i in node_hash['ROOT'].children:
 # 	print(i.data)
 
-# for i in range(0, len(node)):
-# 	print(str(node[i].data) + ' -> ')
-# 	for j in node[i].children:
-# 		print(j.data, end=', ')
+for i in range(len(node)):
+	print(node[i].data, end=', ')
+
+print()
+
+for i in range(len(node)):
+	if len(node[i].children) > 0:
+		print(str(node[i].data) + ' -> ', end='')
+	else:
+		print(str(node[i].data))
+	for j in node[i].children:
+		if j != node[i].children[-1]:
+			print(j.data, end=', ')
+		else:
+			print(j.data)
 
 
 # TEST: to view all node[i] values
