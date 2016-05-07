@@ -36,20 +36,49 @@ z = Node("ROOT")
 re_courses = re.compile('\w+\s\d+\w*')	# regex for courses
 
 f = open('studyplan.txt', 'r')
-nodes = list(set(re_courses.findall(f.read())))
-nodes.sort()
-print(nodes)
-node = len(nodes) * [0]
-
 node_hash = {}
 
-for i in range(len(nodes)):
-	node[i] = nodes[i]
-	print('node[' + str(i) + '] = ' + str(node[i]))
+courses = list(set(re_courses.findall(f.read())))
+# courses.sort()
+# print(courses)
+node = (len(courses)+1) * [0]
 
-# for line in f:
-	# check for RegEx matches
-	# if re_courses.findall(line):	
+node[0] = Node('ROOT')
+node_hash['ROOT'] = node[0]
+
+# node[i] = courses[i-1]
+# print('node[' + str(i) + '] = ' + str(node[i]))
+f.seek(0)
+n = 1
+for line in f:
+	r = re_courses.findall(line)
+	if r and r[0] not in node_hash:
+		node[n] = Node(r[0])
+		node[0].add_child(node[n])
+		node_hash[r[0]] = node[n]
+		n += 1
+	try:
+		if r and r[1] not in node_hash:
+			node[n] = Node(r[1])
+			node_hash[r[0]].add_child(node[n])
+			node_hash[r[1]] = node[n]
+			n += 1
+	except:
+		pass
+
+# for i in node_hash['ROOT'].children:
+# 	print(i.data)
+
+# for i in range(0, len(node)):
+# 	print(str(node[i].data) + ' -> ')
+# 	for j in node[i].children:
+# 		print(j.data, end=', ')
+
+
+# TEST: to view all node[i] values
+# for i in range(len(node)):
+# 	print('node[' + str(i) + '] = ' + str(node[i].data))
+
 	# if re[0] not in tree from DFS
 		# if  re_courses.findall(line)[0] not in node_hash:
 			# node_hash[re_courses.findall(line)[0]] = 
