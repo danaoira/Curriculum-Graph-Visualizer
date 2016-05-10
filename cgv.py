@@ -76,6 +76,7 @@ read = False
 track_hash_key = ''
 track_hash_value = ''
 for line in f:
+	r = re_courses.findall(line)
 	if '##' in line:
 		pass
 	elif ('required' in line) or (elective in line):
@@ -96,13 +97,13 @@ for line in f:
 			track_hash_key = ''
 			track_hash_value = ''
 		read = False
-	elif read is True and re_courses.findall(line):
+	elif read is True and r:
 		track_hash_value = track_hash_value + line
-		if re_courses.findall(line)[0] not in courses:
-			courses.append(re_courses.findall(line)[0])
+		if r[0] not in courses:
+			courses.append(r[0])
 		try:
-			if re_courses.findall(line)[1] not in courses:
-				courses.append(re_courses.findall(line)[1])
+			if r[1] not in courses:
+				courses.append(r[1])
 		except:
 			pass
 
