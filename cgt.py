@@ -71,6 +71,11 @@ def bfs(root):
 			visited.append(vertex)
 			for i in vertex.children:
 				queue.append(i)
+		else:
+			visited.remove(vertex)
+			visited.append(vertex)
+			for i in vertex.children:
+				queue.append(i)
 	return visited
 
 re_courses = re.compile('\w+\s\d+\w*')	# regex for courses
