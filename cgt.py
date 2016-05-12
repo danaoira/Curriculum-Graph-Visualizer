@@ -1,6 +1,7 @@
 # cgt.py - Curriculum Graph Tree - Dana Toribio
 
-import collections
+from collections import deque
+from collections import OrderedDict
 import os
 import re
 import sys
@@ -39,9 +40,10 @@ def populate_tree(file, tree):
 		try:
 			if r and r[1] not in tree:
 				tree[r[1]] = Node(r[1])
-				tree[r[0]].add_child(tree[r[1]])
-				if '*' in line:
-					tree[r[1]].set_priority()
+			tree[r[0]].add_child(tree[r[1]])
+			if '*' in line:
+				tree[r[1]].set_priority()
+
 		except:
 			pass
 
@@ -60,15 +62,31 @@ def print_tree(tree):
 			else:
 				print(j.data)
 
+def bfs(root):
+	visited = []
+	queue = deque([root])
+	while queue:
+		vertex = queue.popleft()
+		if vertex not in visited:
+			visited.append(vertex)
+			for i in vertex.children:
+				queue.append(i)
+	return visited
+
 re_courses = re.compile('\w+\s\d+\w*')	# regex for courses
 
-node_hash = collections.OrderedDict()
+node_hash = OrderedDict()
 node_hash['ROOT'] = Node("ROOT")
 
 f = open('studyplan.txt', 'r')
 
 populate_tree(f, node_hash)
-print_tree(node_hash)
+# print_tree(node_hash)
+
+result = bfs(node_hash['ROOT'])
+
+for i in result:
+	print(i.data)
 
 # BREADTH FIRST SEARCH
 
