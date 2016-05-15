@@ -87,24 +87,56 @@ def bfs(root):
 			queue.append(i)
 	return visited
 
+f = open('studyplan.txt', 'r')
 re_courses = re.compile('\w+\s\d+\w*')	# regex for courses
-taken_courses = ['CPSC 120', 'ENGL 101', 'MATH 150A', 'MATH 150B']
+taken_courses = ['CPSC 120', 'ENGL 101']
 
 node_hash = OrderedDict()
 node_hash['ROOT'] = Node("ROOT")
 
-f = open('studyplan.txt', 'r')
-
 populate_tree(f, node_hash)
+
 update_completed(node_hash, taken_courses)
-# print_tree(node_hash)
 
 result = bfs(node_hash['ROOT'])
 
 for i in result:
-	print(i.data, i.priority, i.units, i.taken)
+	print(i.units, i.data, i.priority, i.taken)
 
-# BREADTH FIRST SEARCH
+# SUGGESTION ALGORITHM
+suggestion_hash = OrderedDict()
+suggestion_hash['taken'] = []
 
-# def bfs(root_node):
-# 	return null
+# print(suggestion_hash)
+
+count = 1
+unit_count = 0
+suggestion_hash[count] = []
+for i in result:
+	if i.taken is True:
+		suggestion_hash['taken'].append(i)
+	elif (unit_count + i.units) <= 16:
+		suggestion_hash[count].append(i)
+		unit_count = unit_count + i.units
+	else:
+		count = count + 1
+		suggestion_hash[count] = []
+		suggestion_hash[count].append(i)
+		unit_count = i.units
+
+for i in suggestion_hash:
+	print(i)
+	for j in suggestion_hash[i]:
+		print(j.units, j.data)
+
+# i = 1
+# unit_count = 0
+# for each course in BFS result:
+	# if Taken is True:
+		# suggestion_hash['taken'].append(course)
+	# elif (unit_count + i.units) <= 16:
+		# suggestion_hash[i].append(course)
+	# else:
+		# i++
+		# suggestion_hash[i].append()
+		# unit_count 
