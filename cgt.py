@@ -89,7 +89,7 @@ def bfs(root):
 
 f = open('studyplan.txt', 'r')
 re_courses = re.compile('\w+\s\d+\w*')	# regex for courses
-taken_courses = ['CPSC 120', 'ENGL 101']
+taken_courses = []
 
 node_hash = OrderedDict()
 node_hash['ROOT'] = Node("ROOT")
@@ -111,10 +111,13 @@ suggestion_hash['taken'] = []
 
 count = 1
 unit_count = 0
+prev_count = 0
 suggestion_hash[count] = []
 for i in result:
 	if i.taken is True:
 		suggestion_hash['taken'].append(i)
+	elif (prev_count != 0) and ((prev_count + i.units) <= 16):
+		suggestion_hash[count].append(i)
 	elif (unit_count + i.units) <= 16:
 		suggestion_hash[count].append(i)
 		unit_count = unit_count + i.units
@@ -122,10 +125,11 @@ for i in result:
 		count = count + 1
 		suggestion_hash[count] = []
 		suggestion_hash[count].append(i)
+		prev_count = unit_count
 		unit_count = i.units
 
 for i in suggestion_hash:
-	print(i)
+	print('**', i, '**')
 	for j in suggestion_hash[i]:
 		print(j.units, j.data)
 
