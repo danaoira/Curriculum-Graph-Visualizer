@@ -1,115 +1,64 @@
 # cgv.py - Curriculum Graph Visualizer - Dana Toribio
 
+from collections import deque
+from collections import OrderedDict
 import graphviz
 import os
 import re
 import sys
 
+# ----- globals -----------------------
+
 re_courses = re.compile('\w+\s\d+\w*')	# regex for courses
 
-f = open(sys.argv[1], 'r')
+# ----- classes -----------------------
 
 class Node:
-
 	def __init__(self, data):
 		self.data = data
+		self.children = []
 		self.priority = False
 		self.units = 0
-		self.children = []
+		self.taken = False
 
 	def add_child(self, obj):
 		self.children.append(obj)
 
-	def priority(self):
-		self.priority = True
-
 	def get_child(self):
 		return self.children
 
-nf = open('studyplan.txt', 'w')
+	def set_priority(self):
+		self.priority = True
 
-print('finished creating study plan')
-print('opening study plan')
+	def set_units(self):
+		if 'CPSC' or 'PHYS' in self.data:
+			if self.data[-1] is 'L':
+				self.units = 1
+			else:
+				self.units = 3
+		if 'MATH' in self.data:
+			self.units = 4
 
-courses = []
-tracks = []
-completed = []
-elective = 0
+	def set_taken(self):
+		self.taken = True
 
-track_hash = {}
+# ----- functions ---------------------
 
-for line in f:
-	if '## Major:' in line:
-		major = line[10:-1]
-		break
-
-print('\nAll elective tracks in ' + str(major) + ':\n')
-
-# find elective tracks
-for line in f:
-	if '##' in line:
-		pass
-	elif ('required' not in line) and ('#' in line):
-		tracks.append(line[2:-1])
-
-# print elective tracks
-for i, item in enumerate(tracks, start=1):
-	print('[' + str(i) + '] ' + item)
-
-print('\nPlease select ONE elective track:', end=' ')
-
-# user input for elective track
-try:
-	elective = int(input())
-except:
-	print('\n> Invalid input, please try again:', end=' ')
-	elective = int(input())
-
-elective = tracks[elective-1]
-
-f.seek(0)
-
-# toggle to read courses for user's study plan
-read = False
-
-# read courses for user's study plan
-track_hash_key = ''
-track_hash_value = ''
-for line in f:
-	r = re_courses.findall(line)
-	if '##' in line:
-		pass
-	elif ('required' in line) or (elective in line):
-		if track_hash_key is not '':
-			track_hash[track_hash_key] = track_hash_value
-			nf.write(track_hash_key)
-			nf.write(track_hash[track_hash_key] + '\n')
-			track_hash_key = ''
-			track_hash_value = ''
-		read = True
-		track_hash[line] = ''
-		track_hash_key = line
-	elif '#' in line:
-		if track_hash_key is not '':
-			track_hash[track_hash_key] = track_hash_value
-			nf.write(track_hash_key)
-			nf.write(track_hash[track_hash_key] + '\n')
-			track_hash_key = ''
-			track_hash_value = ''
-		read = False
-	elif read is True and r:
-		track_hash_value = track_hash_value + line
-		if r[0] not in courses:
-			courses.append(r[0])
-		try:
-			if r[1] not in courses:
-				courses.append(r[1])
-		except:
-			pass
-
-# STUDY PLAN TREE OPERATION
-
-print('\nAll courses in ' + str(major) + ':\n')
+# breadth first search sort on study plan tree
+def bfs(root):
+	# input: tree with nodes organized by prerequisites
+	# output: bfs-sorted list of courses by order of prerequisites met
+	visited = []
+	queue = deque([root])
+	while queue:
+		vertex = queue.popleft()
+		if vertex in visited:
+			visited.remove(vertex)
+		if vertex.data is not 'ROOT':
+			visited.append(vertex)
+		for i in vertex.children:
+			queue.append(i)
+	return visited
 
 # print list of courses
 def courses_table(courses):
@@ -119,12 +68,79 @@ def courses_table(courses):
 		else:
 			print('{:10s}'.format(item), end=' ')
 
-courses_table(courses)
+# suggestion algorithm
+def create_studyplan(bfs):
+	# input: bfs result
+	# output: list of study plan suggestion by semester
+	suggestion_hash = OrderedDict()
+	suggestion_hash['taken'] = []
 
-print('\n\nInput courses completed:\n')
+	count = 1
+	unit_count = 0
+	prev_count = 0
+	suggestion_hash[count] = []
+	for i in bfs:
+		if i.taken is True:
+			suggestion_hash['taken'].append(i)
+		elif (prev_count != 0) and ((prev_count + i.units) <= 16):
+			suggestion_hash[count].append(i)
+		elif (unit_count + i.units) <= 16:
+			suggestion_hash[count].append(i)
+			unit_count = unit_count + i.units
+		else:
+			count = count + 1
+			suggestion_hash[count] = []
+			suggestion_hash[count].append(i)
+			prev_count = unit_count
+			unit_count = i.units
+	return suggestion_hash
+
+# populate study plan tree
+def create_tree(file):
+	# input: studyplan file, empty dictionary for tree
+	# output: tree organized by courses and prerequisites
+	tree = OrderedDict()
+	tree['ROOT'] = Node("ROOT")
+
+	for line in file:
+		r = re_courses.findall(line)
+		if r and r[0] not in tree:
+			tree[r[0]] = Node(r[0])				# create Node obj
+			tree['ROOT'].add_child(tree[r[0]])	# set as child to ROOT
+			if '*' in line:
+				tree[r[0]].set_priority()		# set priority
+			tree[r[0]].set_units()				# set units
+		try:
+			if r and r[1] not in tree:
+				tree[r[1]] = Node(r[1])
+			tree[r[0]].add_child(tree[r[1]])
+			if '*' in line:
+				tree[r[1]].set_priority()
+			tree[r[1]].set_units()
+		except:
+			pass
+	return tree
+
+# find major
+def get_major(file):
+	for line in file:
+		if '## Major:' in line:
+			major = line[10:-1]
+			break
+	return major
+
+# find elective tracks
+def get_tracks(file):
+	track_list = []
+	for line in file:
+		if '##' in line:
+			pass
+		elif ('required' not in line) and ('#' in line):
+			track_list.append(line[2:-1])
+	return track_list
 
 # handles course completed input
-def input_match(course):
+def handle_taken_input(course):
 	for i in course:
 		if i in completed:
 			print('> Repeat info: ' + str(i))
@@ -133,21 +149,157 @@ def input_match(course):
 		else:
 			print('> Does not exist: ' + str(i))
 
-# course completed input & error check
-course_completed = re_courses.findall(input().upper())
-if len(course_completed) == 0:
-	print('> Invalid input, please try again:')
-	course_completed = re_courses.findall(input().upper())
-while len(course_completed) > 0:
-	input_match(course_completed)
-	course_completed = re_courses.findall(input().upper())
+# user input for elective track
+def input_elective(elec_trk):
+	elective = 0
+	try:
+		elective = int(input())
+	except:
+		print('\n> Invalid input, please try again:', end=' ')
+		elective = int(input())
+	return elec_trk[elective-1]
 
-# UPDATE STUDY PLAN TREE WITH COMPLETED
-# STUDY PLAN SUGGESTION OPERATION
+# user input for courses taken & error check
+def input_taken_courses():
+	taken = re_courses.findall(input().upper())
+	if len(taken) == 0:
+		print('> Invalid input, please try again:')
+		taken = re_courses.findall(input().upper())
+	while len(taken) > 0:
+		handle_taken_input(taken)
+		taken = re_courses.findall(input().upper())
+	return taken
 
-print('Generating study plan.')
-# convert to python graphviz
+# print elective tracks
+def print_tracks(elec_trk):
+	for i, item in enumerate(elec_trk, start=1):
+		print('[' + str(i) + '] ' + item)
 
-os.startfile('cgc.py')
+# for testing: print bfs result
+def test_print_bfs(bfs):
+	# input: bfs results
+	# output: prints data of bfs results
+	print('\n----- BREADTH FIRST SEACH RESULTS ------------\n')
+	print('UNITS COURSE PRIORITY TAKEN')
+	for i in bfs:
+		print(i.units, i.data, i.priority, i.taken)
+
+# for testing: print study plan suggestion
+def test_print_studyplan(studyplan):
+	# input: dictionary of study plan data
+	# output: prints the study plan data by semester
+	print('\n----- STUDY PLAN RESULTS ---------------------\n')
+	for i in studyplan:
+		print('cluster:', i)
+		for j in studyplan[i]:
+			print(j.units, j.data)
+		print()
+
+# for testing: print tree results
+def test_print_tree(tree):
+	# input: study plan tree
+	# output: prints the tree results
+	print('\n----- STUDY PLAN TREE RESULTS ----------------\n')
+	for i in tree:
+		if len(tree[i].children) > 0:
+			if tree[i].priority == True:
+				print('*', end=' ')
+			print(str(tree[i].data) + ' -> ', end='')
+		else:
+			print(tree[i].data)
+		for j in tree[i].children:
+			if j != tree[i].children[-1]:
+				print(j.data, end=', ')
+			else:
+				print(j.data)
+
+# updates data of taken courses
+def update_taken(tree, taken_list):
+	# input: study plan tree, courses taken
+	# output: updates courses taken to True in study plan tree
+	for i in taken_list:
+		tree[i].set_taken()
+
+# write core and elective prereqs to studyplan.txt
+def write_core_elecs(infile, outfile, elective, courses):
+	read = False	# toggle to read courses for user's study plan
+	trk_hash = {}
+	key = ''
+	val = ''
+
+	for line in infile:
+		r = re_courses.findall(line)
+		if '##' in line:
+			pass
+		elif ('required' in line) or (elective in line):
+			if key is not '':
+				trk_hash[key] = val
+				outfile.write(key)
+				outfile.write(trk_hash[key] + '\n')
+				key = ''
+				val = ''
+			read = True
+			trk_hash[line] = ''
+			key = line
+		elif '#' in line:
+			if key is not '':
+				trk_hash[key] = val
+				outfile.write(key)
+				outfile.write(trk_hash[key] + '\n')
+				key = ''
+				val = ''
+			read = False
+		elif read is True and r:
+			val = val + line
+			if r[0] not in courses:
+				courses.append(r[0])
+			try:
+				if r[1] not in courses:
+					courses.append(r[1])
+			except:
+				pass
+
+# ----- main --------------------------
+
+f = open(sys.argv[1], 'r')
+nf = open('studyplan.txt', 'w')
+
+major = get_major(f)
+
+print('\nAll elective tracks in ' + str(major) + ':\n')
+tracks = get_tracks(f)
+print_tracks(tracks)
+
+print('\nPlease select ONE elective track:', end=' ')
+elective = input_elective(tracks)
+
+f.seek(0)
+
+courses = []
+
+write_core_elecs(f, nf, elective, courses)
+
+print('\nAll courses in ' + str(major) + ':\n')
+courses_table(courses)
+
+print('\n\nInput courses taken:\n')
+taken_courses = input_taken_courses()
+
+nf.close()
+of = open('studyplan.txt', 'r')
+
+tree_result = create_tree(of)
+update_taken(tree_result, taken_courses)
+# test_print_tree(tree_result)
+
+bfs_result = bfs(tree_result['ROOT'])
+# test_print_bfs(bfs_result)
+
+studyplan_result = create_studyplan(bfs_result)
+# test_print_studyplan(studyplan_result)
+
+# CONVERT PYTHON TO GRAPHVIZ
+
+# os.startfile('cgc.py')
 
 # generate graph
