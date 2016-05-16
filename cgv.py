@@ -140,11 +140,11 @@ def get_tracks(file):
 	return track_list
 
 # handles course completed input
-def handle_taken_input(course, taken_list):
-	for i in course:
+def handle_taken_input(usr_input, course_list, taken_list):
+	for i in usr_input:
 		if i in taken_list:
 			print('> Repeat info: ' + str(i))
-		elif i in courses:
+		elif i in course_list:
 			taken_list.append(i)
 		else:
 			print('> Does not exist: ' + str(i))
@@ -160,14 +160,14 @@ def input_elective(elec_trk):
 	return elec_trk[elective-1]
 
 # user input for courses taken & error check
-def input_taken_courses():
+def input_taken_courses(course_list):
 	course = re_courses.findall(input().upper())
 	taken = []
 	if len(course) == 0:
 		print('> Invalid input, please try again:')
 		course = re_courses.findall(input().upper())
 	while len(course) > 0:
-		handle_taken_input(course, taken)
+		handle_taken_input(course, course_list, taken)
 		course = re_courses.findall(input().upper())
 	return taken
 
@@ -270,52 +270,55 @@ def write_suggestions(studyplan, outfile):
 			of.write('# ' + str(i) + '\n')
 		elif type(i) is int:
 			of.write('\n# semester ' + str(i) + '\n')
-		for j in studyplan_result[i]:
+		for j in studyplan[i]:
 			of.write(str(j.data) + '\n')
 
 # ----- main --------------------------
+def main():
+	f = open(sys.argv[1], 'r')
+	fn = 'studyplan.txt'		# filename
+	of = open(fn, 'w')			# output file
 
-f = open(sys.argv[1], 'r')
-fn = 'studyplan.txt'		# filename
-of = open(fn, 'w')			# output file
+	major = get_major(f)
 
-major = get_major(f)
+	print('\nAll elective tracks in ' + str(major) + ':\n')
+	tracks = get_tracks(f)
+	print_tracks(tracks)
 
-print('\nAll elective tracks in ' + str(major) + ':\n')
-tracks = get_tracks(f)
-print_tracks(tracks)
+	print('\nPlease select ONE elective track:', end=' ')
+	elective = input_elective(tracks)
 
-print('\nPlease select ONE elective track:', end=' ')
-elective = input_elective(tracks)
+	f.seek(0)
 
-f.seek(0)
+	courses = []
 
-courses = []
+	write_core_elecs(f, of, elective, courses)
 
-write_core_elecs(f, of, elective, courses)
+	print('\nAll courses in ' + str(major) + ':\n')
+	courses_table(courses)
 
-print('\nAll courses in ' + str(major) + ':\n')
-courses_table(courses)
+	print('\n\nInput courses taken:\n')
+	taken_courses = input_taken_courses(courses)
 
-print('\n\nInput courses taken:\n')
-taken_courses = input_taken_courses()
+	of.close()
+	of = open(fn, 'r')
 
-of.close()
-of = open(fn, 'r')
+	tree_result = create_tree(of)
+	update_taken(tree_result, taken_courses)
+	# test_print_tree(tree_result)
 
-tree_result = create_tree(of)
-update_taken(tree_result, taken_courses)
-# test_print_tree(tree_result)
+	bfs_result = bfs(tree_result['ROOT'])
+	# test_print_bfs(bfs_result)
 
-bfs_result = bfs(tree_result['ROOT'])
-# test_print_bfs(bfs_result)
+	studyplan_result = create_studyplan(bfs_result)
+	# test_print_studyplan(studyplan_result)
 
-studyplan_result = create_studyplan(bfs_result)
-# test_print_studyplan(studyplan_result)
+	of.close()
 
-of.close()
+	write_suggestions(studyplan_result, fn)
 
-write_suggestions(studyplan_result, fn)
+if __name__ == '__main__':
+	main()
 
 # CONVERT PYTHON TO GRAPHVIZ
 
