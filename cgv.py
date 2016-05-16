@@ -259,10 +259,24 @@ def write_core_elecs(infile, outfile, elective, courses):
 			except:
 				pass
 
+# write suggestions to studyplan.txt
+def write_suggestions(studyplan, outfile):
+	# input: studyplan, filename of output file
+	# output: write course suggestions to output file
+	of = open(outfile, 'a')
+	for i in studyplan:
+		if ('taken' in str(i)) and len(studyplan[i]) > 0:
+			of.write('# ' + str(i) + '\n')
+		elif type(i) is int:
+			of.write('\n# semester ' + str(i) + '\n')
+		for j in studyplan_result[i]:
+			of.write(str(j.data) + '\n')
+
 # ----- main --------------------------
 
 f = open(sys.argv[1], 'r')
-nf = open('studyplan.txt', 'w')
+fn = 'studyplan.txt'		# filename
+of = open(fn, 'w')			# output file
 
 major = get_major(f)
 
@@ -277,7 +291,7 @@ f.seek(0)
 
 courses = []
 
-write_core_elecs(f, nf, elective, courses)
+write_core_elecs(f, of, elective, courses)
 
 print('\nAll courses in ' + str(major) + ':\n')
 courses_table(courses)
@@ -285,8 +299,8 @@ courses_table(courses)
 print('\n\nInput courses taken:\n')
 taken_courses = input_taken_courses()
 
-nf.close()
-of = open('studyplan.txt', 'r')
+of.close()
+of = open(fn, 'r')
 
 tree_result = create_tree(of)
 update_taken(tree_result, taken_courses)
@@ -297,6 +311,10 @@ bfs_result = bfs(tree_result['ROOT'])
 
 studyplan_result = create_studyplan(bfs_result)
 # test_print_studyplan(studyplan_result)
+
+of.close()
+
+write_suggestions(studyplan_result, fn)
 
 # CONVERT PYTHON TO GRAPHVIZ
 
