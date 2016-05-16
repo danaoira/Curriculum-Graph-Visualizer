@@ -79,7 +79,7 @@ def create_studyplan(bfs):
 	return suggestion_hash
 
 # populate study plan tree
-def populate_tree(file):
+def create_tree(file):
 	# input: studyplan file, empty dictionary for tree
 	# output: tree organized by courses and prerequisites
 	tree = OrderedDict()
@@ -108,6 +108,8 @@ def populate_tree(file):
 def test_print_bfs(bfs):
 	# input: bfs results
 	# output: prints data of bfs results
+	print('\n----- BREADTH FIRST SEACH RESULTS ------------\n')
+	print('UNITS COURSE PRIORITY TAKEN')
 	for i in bfs:
 		print(i.units, i.data, i.priority, i.taken)
 
@@ -115,15 +117,18 @@ def test_print_bfs(bfs):
 def test_print_studyplan(studyplan):
 	# input: dictionary of study plan data
 	# output: prints the study plan data by semester
+	print('\n----- STUDY PLAN RESULTS ---------------------\n')
 	for i in studyplan:
-		print('**', i, '**')
+		print('cluster:', i)
 		for j in studyplan[i]:
 			print(j.units, j.data)
+		print()
 
 # for testing: print tree results
 def test_print_tree(tree):
 	# input: study plan tree
-	# output: prints the 
+	# output: prints the tree results
+	print('\n----- STUDY PLAN TREE RESULTS ----------------\n')
 	for i in tree:
 		if len(tree[i].children) > 0:
 			if tree[i].priority == True:
@@ -148,12 +153,12 @@ re_courses = re.compile('\w+\s\d+\w*')	# regex for courses
 f = open('studyplan.txt', 'r')
 taken_courses = []
 
-tree_result = populate_tree(f)
-# test_print_tree(tree_result)
+tree_result = create_tree(f)
+test_print_tree(tree_result)
 update_taken(tree_result, taken_courses)
 
 bfs_result = bfs(tree_result['ROOT'])
-# test_print_bfs(bfs_result)
+test_print_bfs(bfs_result)
 
 studyplan_result = create_studyplan(bfs_result)
-# test_print_studyplan(studyplan_result)
+test_print_studyplan(studyplan_result)
