@@ -140,12 +140,12 @@ def get_tracks(file):
 	return track_list
 
 # handles course completed input
-def handle_taken_input(course):
+def handle_taken_input(course, taken_list):
 	for i in course:
-		if i in completed:
+		if i in taken_list:
 			print('> Repeat info: ' + str(i))
 		elif i in courses:
-			completed.append(i)
+			taken_list.append(i)
 		else:
 			print('> Does not exist: ' + str(i))
 
@@ -161,13 +161,14 @@ def input_elective(elec_trk):
 
 # user input for courses taken & error check
 def input_taken_courses():
-	taken = re_courses.findall(input().upper())
-	if len(taken) == 0:
+	course = re_courses.findall(input().upper())
+	taken = []
+	if len(course) == 0:
 		print('> Invalid input, please try again:')
-		taken = re_courses.findall(input().upper())
-	while len(taken) > 0:
-		handle_taken_input(taken)
-		taken = re_courses.findall(input().upper())
+		course = re_courses.findall(input().upper())
+	while len(course) > 0:
+		handle_taken_input(course, taken)
+		course = re_courses.findall(input().upper())
 	return taken
 
 # print elective tracks
