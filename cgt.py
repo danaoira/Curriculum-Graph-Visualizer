@@ -35,8 +35,56 @@ class Node:
 	def set_taken(self):
 		self.taken = True
 
+# breadth first search sort on study plan tree
+def bfs(root):
+	# input: tree with nodes organized by prerequisites
+	# output: bfs-sorted list of courses by order of prerequisites met
+	visited = []
+	queue = deque([root])
+	while queue:
+		vertex = queue.popleft()
+		if vertex in visited:
+			visited.remove(vertex)
+		if vertex.data is not 'ROOT':
+			visited.append(vertex)
+		for i in vertex.children:
+			queue.append(i)
+	return visited
+
+# suggestion algorithm
+def create_studyplan(bfs):
+	# input: bfs result
+	# output: list of study plan suggestion by semester
+	suggestion_hash = OrderedDict()
+	suggestion_hash['taken'] = []
+
+	count = 1
+	unit_count = 0
+	prev_count = 0
+	suggestion_hash[count] = []
+	for i in bfs:
+		if i.taken is True:
+			suggestion_hash['taken'].append(i)
+		elif (prev_count != 0) and ((prev_count + i.units) <= 16):
+			suggestion_hash[count].append(i)
+		elif (unit_count + i.units) <= 16:
+			suggestion_hash[count].append(i)
+			unit_count = unit_count + i.units
+		else:
+			count = count + 1
+			suggestion_hash[count] = []
+			suggestion_hash[count].append(i)
+			prev_count = unit_count
+			unit_count = i.units
+	return suggestion_hash
+
 # populate study plan tree
-def populate_tree(file, tree):
+def populate_tree(file):
+	# input: studyplan file, empty dictionary for tree
+	# output: tree organized by courses and prerequisites
+	tree = OrderedDict()
+	tree['ROOT'] = Node("ROOT")
+
 	for line in file:
 		r = re_courses.findall(line)
 		if r and r[0] not in tree:
@@ -54,9 +102,28 @@ def populate_tree(file, tree):
 			tree[r[1]].set_units()
 		except:
 			pass
+	return tree
 
-# print tree results
-def print_tree(tree):
+# for testing: print bfs result
+def test_print_bfs(bfs):
+	# input: bfs results
+	# output: prints data of bfs results
+	for i in bfs:
+		print(i.units, i.data, i.priority, i.taken)
+
+# for testing: print study plan suggestion
+def test_print_studyplan(studyplan):
+	# input: dictionary of study plan data
+	# output: prints the study plan data by semester
+	for i in studyplan:
+		print('**', i, '**')
+		for j in studyplan[i]:
+			print(j.units, j.data)
+
+# for testing: print tree results
+def test_print_tree(tree):
+	# input: study plan tree
+	# output: prints the 
 	for i in tree:
 		if len(tree[i].children) > 0:
 			if tree[i].priority == True:
@@ -70,77 +137,23 @@ def print_tree(tree):
 			else:
 				print(j.data)
 
-def update_completed(tree, taken_list):
+# updates data of taken courses
+def update_taken(tree, taken_list):
+	# input: study plan tree, courses taken
+	# output: updates courses taken to True in study plan tree
 	for i in taken_list:
 		tree[i].set_taken()
 
-def bfs(root):
-	visited = []
-	queue = deque([root])
-	while queue:
-		vertex = queue.popleft()
-		if vertex in visited:
-			visited.remove(vertex)
-		if vertex.data is not 'ROOT':
-			visited.append(vertex)
-		for i in vertex.children:
-			queue.append(i)
-	return visited
-
-f = open('studyplan.txt', 'r')
 re_courses = re.compile('\w+\s\d+\w*')	# regex for courses
+f = open('studyplan.txt', 'r')
 taken_courses = []
 
-node_hash = OrderedDict()
-node_hash['ROOT'] = Node("ROOT")
+tree_result = populate_tree(f)
+# test_print_tree(tree_result)
+update_taken(tree_result, taken_courses)
 
-populate_tree(f, node_hash)
+bfs_result = bfs(tree_result['ROOT'])
+# test_print_bfs(bfs_result)
 
-update_completed(node_hash, taken_courses)
-
-result = bfs(node_hash['ROOT'])
-
-for i in result:
-	print(i.units, i.data, i.priority, i.taken)
-
-# SUGGESTION ALGORITHM
-suggestion_hash = OrderedDict()
-suggestion_hash['taken'] = []
-
-# print(suggestion_hash)
-
-count = 1
-unit_count = 0
-prev_count = 0
-suggestion_hash[count] = []
-for i in result:
-	if i.taken is True:
-		suggestion_hash['taken'].append(i)
-	elif (prev_count != 0) and ((prev_count + i.units) <= 16):
-		suggestion_hash[count].append(i)
-	elif (unit_count + i.units) <= 16:
-		suggestion_hash[count].append(i)
-		unit_count = unit_count + i.units
-	else:
-		count = count + 1
-		suggestion_hash[count] = []
-		suggestion_hash[count].append(i)
-		prev_count = unit_count
-		unit_count = i.units
-
-for i in suggestion_hash:
-	print('**', i, '**')
-	for j in suggestion_hash[i]:
-		print(j.units, j.data)
-
-# i = 1
-# unit_count = 0
-# for each course in BFS result:
-	# if Taken is True:
-		# suggestion_hash['taken'].append(course)
-	# elif (unit_count + i.units) <= 16:
-		# suggestion_hash[i].append(course)
-	# else:
-		# i++
-		# suggestion_hash[i].append()
-		# unit_count 
+studyplan_result = create_studyplan(bfs_result)
+# test_print_studyplan(studyplan_result)
