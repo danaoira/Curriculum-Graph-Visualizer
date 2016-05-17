@@ -1,11 +1,3 @@
-## KEY
-## * = priority courses
-## [required] = required tracks
-## -> = prerequisite courses
-## -- = corequisite courses
-
-## Major: Computer Science Undergraduate Curriculum
-
 # Core Courses [required]
 CPSC 120 -> CPSC 121 *
 CPSC 121 -> CPSC 131 *
@@ -47,34 +39,47 @@ CPSC 332 -> CPSC 473
 CPSC 223 -> CPSC 476
 CPSC 351 -> CPSC 476
 
-# Scientific Computuing (SC) track
-MATH 340
-MATH 370
+# taken
+MATH 270A
+MATH 270B
 
-# Multimedia and Digital Games (MG) track
-CPSC 131 -> CPSC 386
-CPSC 386 -> CPSC 486
-CPSC 484 -> CPSC 486
-CPSC 486 -> CPSC 489
-MATH 150B -> CPSC 484
-MATH 270B -> CPSC 484
+# semester: 1
+CPSC 120
+ENGL 101
+MATH 150A
+PHYS 225
+CPSC 121
 
-# Software Engineering (SE) track
-CPSC 362 -> CPSC 462
-CPSC 362 -> CPSC 464
-CPSC 362 -> CPSC 463
-CPSC 466
+# semester: 2
+MATH 150B
+PHYS 225L
+PHYS 226
+CPSC 131
+MATH 338
 
-# Bioinformatics (Bio) track
-CPSC 483
-CPSC 485
+# semester: 3
+MATH 250A
+PHYS 226L
+CPSC 223
+CPSC 240
+CPSC 254
+CPSC 311
 
-# Cybersecurity (CySec) track
-CPSC 131 -> CPSC 439
-CPSC 254 -> CPSC 353
-CPSC 301 -> CPSC 452
-CPSC 351 -> CPSC 353
-CPSC 351 -> CPSC 454
-CPSC 351 -> CPSC 456
-CPSC 353 -> CPSC 454
-MATH 270B -> CPSC 439
+# semester: 4
+CPSC 332
+CPSC 440
+CPSC 301
+CPSC 351
+CPSC 315
+
+# semester: 5
+CPSC 431
+CPSC 473
+CPSC 323
+CPSC 335
+CPSC 362
+
+# semester: 6
+CPSC 471
+CPSC 476
+CPSC 481
