@@ -17,6 +17,7 @@ class Node:
 	def __init__(self, data):
 		self.data = data
 		self.children = []
+		self.parents = []
 		self.priority = False
 		self.units = 0
 		self.taken = False
@@ -26,6 +27,12 @@ class Node:
 
 	def get_child(self):
 		return self.children
+
+	def add_parent(self, obj):
+		self.parents.append(obj)
+
+	def get_parent(self):
+		return self.parents
 
 	def set_priority(self):
 		self.priority = True
@@ -105,6 +112,7 @@ def create_tree(file):
 		try:
 			if r and r[1] not in tree:
 				tree[r[1]] = Node(r[1])
+			tree[r[1]].add_parent(tree[r[0]])
 			tree[r[0]].add_child(tree[r[1]])
 			if '*' in line:
 				tree[r[1]].set_priority()
@@ -214,6 +222,23 @@ def test_print_tree(tree):
 			else:
 				print(j.data)
 
+def test_print_prereqs(tree):
+	# input: study plan tree
+	# output: prints courses and their prerequisites
+	print('\n----- STUDY PLAN PREREQUISITES ---------------\n')
+	for i in tree:
+		if len(tree[i].parents) > 0:
+			if tree[i].priority == True:
+				print('*', end=' ')
+			print(str(tree[i].data) + ' -> ', end='')
+		else:
+			print(tree[i].data)
+		for j in tree[i].parents:
+			if j != tree[i].parents[-1]:
+				print(j.data, end=', ')
+			else:
+				print(j.data)
+
 # updates data of taken courses
 def update_taken(tree, taken_list):
 	# input: study plan tree, courses taken
@@ -305,6 +330,7 @@ of = open(fn, 'r')
 tree_result = create_tree(of)
 update_taken(tree_result, taken_courses)
 # test_print_tree(tree_result)
+# test_print_prereqs(tree_result)
 
 bfs_result = bfs(tree_result['ROOT'])
 # test_print_bfs(bfs_result)
