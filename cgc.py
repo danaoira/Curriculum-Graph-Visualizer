@@ -93,7 +93,6 @@ for line in f:
 	elif line is '\n':
 		write_to = ''
 	course = re_courses.findall(line)
-	print(course)
 	if write_to is 'core':
 		if (course) and ('->' in line) and ('*' in line):
 			core_courses = core_courses + 'g' + prereq_edge(course[0], course[1], True)
