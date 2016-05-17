@@ -60,14 +60,6 @@ def bfs(root):
 			queue.append(i)
 	return visited
 
-# print list of courses
-def courses_table(courses):
-	for i, item in enumerate(sorted(courses), start=1):
-		if i % 7 == 0:
-			print()
-		else:
-			print('{:10s}'.format(item), end=' ')
-
 # suggestion algorithm
 def create_studyplan(bfs):
 	# input: bfs result
@@ -171,6 +163,14 @@ def input_taken_courses(course_list):
 		course = re_courses.findall(input().upper())
 	return taken
 
+# print list of courses
+def print_courses(courses):
+	for i, item in enumerate(sorted(courses), start=1):
+		if i % 7 == 0:
+			print()
+		else:
+			print('{:10s}'.format(item), end=' ')
+
 # print elective tracks
 def print_tracks(elec_trk):
 	for i, item in enumerate(elec_trk, start=1):
@@ -269,59 +269,57 @@ def write_suggestions(studyplan, outfile):
 		if ('taken' in str(i)) and len(studyplan[i]) > 0:
 			of.write('# ' + str(i) + '\n')
 		elif type(i) is int:
-			of.write('\n# semester ' + str(i) + '\n')
+			of.write('\n# semester: ' + str(i) + '\n')
 		for j in studyplan[i]:
 			of.write(str(j.data) + '\n')
 
 # ----- main --------------------------
-def main():
-	f = open(sys.argv[1], 'r')
-	fn = 'studyplan.txt'		# filename
-	of = open(fn, 'w')			# output file
+f = open(sys.argv[1], 'r')
+fn = 'studyplan.txt'		# filename
+of = open(fn, 'w')			# output file
 
-	major = get_major(f)
+major = get_major(f)
 
-	print('\nAll elective tracks in ' + str(major) + ':\n')
-	tracks = get_tracks(f)
-	print_tracks(tracks)
+print('\nAll elective tracks in ' + str(major) + ':\n')
+tracks = get_tracks(f)
+print_tracks(tracks)
 
-	print('\nPlease select ONE elective track:', end=' ')
-	elective = input_elective(tracks)
+print('\nPlease select ONE elective track:', end=' ')
+elective = input_elective(tracks)
 
-	f.seek(0)
+f.seek(0)
 
-	courses = []
+courses = []
 
-	write_core_elecs(f, of, elective, courses)
+write_core_elecs(f, of, elective, courses)
 
-	print('\nAll courses in ' + str(major) + ':\n')
-	courses_table(courses)
+print('\nAll courses in ' + str(major) + ':\n')
+print_courses(courses)
 
-	print('\n\nInput courses taken:\n')
-	taken_courses = input_taken_courses(courses)
+print('\n\nInput courses taken:\n')
+taken_courses = input_taken_courses(courses)
 
-	of.close()
-	of = open(fn, 'r')
+of.close()
+of = open(fn, 'r')
 
-	tree_result = create_tree(of)
-	update_taken(tree_result, taken_courses)
-	# test_print_tree(tree_result)
+tree_result = create_tree(of)
+update_taken(tree_result, taken_courses)
+# test_print_tree(tree_result)
 
-	bfs_result = bfs(tree_result['ROOT'])
-	# test_print_bfs(bfs_result)
+bfs_result = bfs(tree_result['ROOT'])
+# test_print_bfs(bfs_result)
 
-	studyplan_result = create_studyplan(bfs_result)
-	# test_print_studyplan(studyplan_result)
+studyplan_result = create_studyplan(bfs_result)
+# test_print_studyplan(studyplan_result)
 
-	of.close()
+of.close()
 
-	write_suggestions(studyplan_result, fn)
+write_suggestions(studyplan_result, fn)
 
-if __name__ == '__main__':
-	main()
+os.startfile('cgc.py')
 
-# CONVERT PYTHON TO GRAPHVIZ
-
-# os.startfile('cgc.py')
-
-# generate graph
+# TO DO
+# add translation for course suggestions via cgc.py
+# add the rest of the elective tracks and their courses
+# add prerequisite relations to elective courses
+# if have time: handle user input for taken courses that do not have prerequisites met
