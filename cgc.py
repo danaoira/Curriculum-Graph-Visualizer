@@ -50,7 +50,7 @@ trk_electives_footer = "c2.body.append('label = \""
 completed_courses = ''
 suggestions = ''
 core_courses = ''
-elec_prereq = ''
+elec_prereqs = ''
 
 def node(value):
 	return ".node('" + value + "')\n"
@@ -70,6 +70,8 @@ def coreq_edge(node1, node2, crit):
 f = open('studyplan.txt', 'r')
 nf = open('studyplan.py', 'w')
 write_to = ''
+legend_index = 0
+legend_color = ['pink', 'lightsalmon', 'peachpuff', 'darkseagreen', 'lightblue', 'plum', 'crimson', 'chocolate', 'goldenrod']
 
 for line in f:
 	if ('#' in line.split(' ')) and ('Core' in line):
@@ -81,10 +83,18 @@ for line in f:
 	elif ('#' in line.split(' ')) and ('IE' in line):
 		write_to = 'trk_electives'
 		trk_electives = trk_electives + line[2:-1] + '"\')\n'
+	elif ('#' in line.split(' ')) and ('taken' in line):
+		write_to = 'suggestions'
+		suggestions = suggestions + '\n' + line + "g.attr('node', style='filled', color='grey')\n"
+	elif ('#' in line.split(' ')) and ('semester' in line):
+		write_to = 'suggestions'
+		suggestions = suggestions + '\n' + line + "g.attr('node', style='filled', color='" + legend_color[legend_index] + "')\n"
+		legend_index = legend_index + 1
 	elif line is '\n':
 		write_to = ''
+	course = re_courses.findall(line)
+	print(course)
 	if write_to is 'core':
-		course = re_courses.findall(line)
 		if (course) and ('->' in line) and ('*' in line):
 			core_courses = core_courses + 'g' + prereq_edge(course[0], course[1], True)
 		elif (course) and ('--' in line) and ('*' in line):
@@ -97,7 +107,6 @@ for line in f:
 			print(line)
 			core_courses = core_courses + 'g' + node(course[0])
 	elif write_to is 'req_electives':
-		course = re_courses.findall(line)
 		if (course) and ('->' in line):
 			req_electives = req_electives + 'c1' + prereq_edge(course[0], course[1], False)
 		elif (course) and ('--' in line):
@@ -105,13 +114,14 @@ for line in f:
 		elif (course):
 			req_electives = req_electives + 'c1' + node(course[0])
 	elif write_to is 'trk_electives':
-		course = re_courses.findall(line)
 		if (course) and ('->' in line):
 			trk_electives = trk_electives + 'c2' + prereq_edge(course[0], course[1], False)
 		elif (course) and ('--' in line):
 			trk_electives = trk_electives + 'c2' + coreq_edge(course[0], course[1], False)
 		elif (course):
 			trk_electives = trk_electives + 'c2' + node(course[0])
+	elif (write_to is 'suggestions') and course:
+		suggestions = suggestions + 'g' + node(course[0])
 	else:
 		pass
 
@@ -119,7 +129,7 @@ nf.write(header + '\n')
 nf.write(legend + '\n')
 nf.write(req_electives + '\n')
 nf.write(trk_electives + '\n')
-# write course suggestions
+nf.write(suggestions + '\n')
 nf.write(core_courses + '\n')
 # write track prerequisites
 
