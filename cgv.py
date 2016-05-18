@@ -92,6 +92,59 @@ def prereqs_dne(course, term):
 				return False
 	return True
 
+def sp_to_studyplan(term, course):
+	term.append(course)
+	course.set_studyplan()
+
+def sp_to_queue(queue, course):
+	queue.append(course)
+
+def sp_to_newterm(studyplan, term, course):
+	term = term + 1
+	studyplan[term] = []
+	studyplan[term].append(course)
+	course.set_studyplan()
+	return term
+
+def sp_do_queue(queue, unit_count, studyplan, term):
+	new_queue = []
+	for q in queue:
+		print('>>', q.data, unit_count, q.priority, prereqs_met(q), prereqs_dne(q, studyplan[term]), in_limit(q.units, unit_count))
+		if in_limit(q.units, unit_count):
+			if prereqs_dne(q, studyplan[term]) or 'L' in q.data[-1]:	# F T T T
+				studyplan[term].append(q)
+				q.set_studyplan()
+				unit_count = unit_count + q.units
+				print('>> q to sp : ' + str(q.data))
+			else:
+				new_queue.append(q)
+				print('>> D queue : ' + str(q.data))
+		else:
+			new_queue.append(q)
+			print('>> E queue : ' + str(q.data))
+	queue = new_queue
+	return queue
+
+def sp_end_queue(queue, unit_count, studyplan, term):
+	new_queue = []
+	for q in queue:
+		print('>>', q.data, unit_count, q.priority, prereqs_met(q), prereqs_dne(q, studyplan[term]), in_limit(q.units, unit_count))
+		if in_limit(q.units, unit_count):
+			if prereqs_dne(q, studyplan[term]) or 'L' in q.data[-1]:
+				studyplan[term].append(q)
+				q.set_studyplan()
+				unit_count = unit_count + q.units
+				print('>> C to studyplan : ' + str(q.data))
+		elif not in_limit(q.units, unit_count):
+			term = term + 1
+			studyplan[term] = []
+			studyplan[term].append(q)
+			q.set_studyplan()
+			unit_count = q.units
+			print('>> D studyplan : ' + str(q.data))
+	queue = new_queue
+	return queue
+
 # suggestion algorithm
 def create_studyplan(bfs):
 	studyplan = OrderedDict()
@@ -108,148 +161,35 @@ def create_studyplan(bfs):
 			studyplan['taken'].append(i)
 			i.set_studyplan()
 			print('>> taken : ' + str(i.data))
-		elif prereqs_met(i) and prereqs_dne(i, studyplan[term]):					# x T T x
-			if i.priority and in_limit(i.units, unit_count):						# T T T T
-				studyplan[term].append(i)
-				i.set_studyplan()
-				unit_count = unit_count + i.units
-				print('>> A to studyplan : ' + str(i.data))
-			elif i.priority and not in_limit(i.units, unit_count):					# T T T F
-				term = term + 1
-				studyplan[term] = []
-				studyplan[term].append(i)
-				i.set_studyplan()
-				unit_count = i.units
-				print('>> AA studyplan : ' + str(i.data))
-			else:																	# x T T x
-				queue.append(i)
-				print('>> B to queue : ' + str(i.data))
-		elif (prereqs_met(i) and not prereqs_dne(i, studyplan[term])):				# x T F x
-			new_queue = []
-			for q in queue:
-				# print(q.data, '              !!!!!!!!!!!!!!!!!!!!!!!!!!!')
-				if in_limit(q.units, unit_count):									# x T F T
-					if prereqs_dne(q, studyplan[term]) or 'L' in q.data[-1]:
-						studyplan[term].append(q)
-						q.set_studyplan()
-						unit_count = unit_count + q.units
-						print('>> C to studyplan : ' + str(q.data))
-				elif not in_limit(q.units, unit_count):								# x T F F
-					unit_count = 0
-					print('>> units = 0')
-					term = term + 1
-					print('>> new term')
-					studyplan[term] = []
-					new_queue.append(q)
-					print('>> D queue : ' + str(q.data))
-			queue = new_queue
-			if in_limit(i.units, unit_count) and prereqs_dne(i, studyplan[term]):	# x T T T
-				studyplan[term].append(i)
-				i.set_studyplan()
-				unit_count = unit_count + i.units
-				print('>> E to studyplan : ' + str(i.data))
-			elif unit_count > 14:													# x T T F
-				term = term + 1
-				studyplan[term] = []
-				studyplan[term].append(i)
-				i.set_studyplan()
-				unit_count = i.units
-				print('>> F to studyplan : ' + str(i.data))
-			elif i.priority and in_limit(i.units, unit_count):						# T T F T
-				term = term + 1
-				studyplan[term] = []
-				studyplan[term].append(i)
-				i.set_studyplan()
-				unit_count = i.units
-				print('>> FF to studyplan: ' + str(i.data))			
-			elif not i.priority and in_limit(i.units, unit_count):
-				studyplan[term].append(i)
-				i.set_studyplan()
-				unit_count = unit_count + i.units
-			else:																	# x T T x
-				queue.append(i)
-				print(unit_count)
-				print('>> G : ' + str(i.data))
-		elif (not prereqs_met(i) and prereqs_dne(i, studyplan[term])):				# x F T x
-			pass
-		else:
-			print('ELSE: to queue')
-			queue.append(i)
-
+		elif i.priority and prereqs_met(i) and prereqs_dne(i, studyplan[term]) and in_limit(i.units, unit_count):		# T T T T
+			sp_to_studyplan(studyplan[term], i)
+			unit_count = unit_count + i.units
+		elif i.priority and prereqs_met(i) and prereqs_dne(i, studyplan[term]) and not in_limit(i.units, unit_count):	# T T T F
+			queue = sp_do_queue(queue, unit_count, studyplan, term)
+			term = sp_to_newterm(studyplan, term, i)
+			unit_count = i.units
+		elif i.priority and prereqs_met(i) and not prereqs_dne(i, studyplan[term]) and in_limit(i.units, unit_count):	# T T F T
+			queue = sp_do_queue(queue, unit_count, studyplan, term)
+			term = sp_to_newterm(studyplan, term, i)
+			unit_count = i.units
+		elif i.priority and prereqs_met(i) and not prereqs_dne(i, studyplan[term]) and not in_limit(i.units, unit_count):	# T T F F
+			queue = sp_do_queue(queue, unit_count, studyplan, term)
+			term = sp_to_newterm(studyplan, term, i)
+			unit_count = i.units
+		elif not i.priority:
+			sp_to_queue(queue, i)
 		test_print_sp_result(studyplan)
 		test_print_sp_queue(queue)
 		print('\nEND:', unit_count, '>', term)
 
-	if (queue):
-		for q in queue:
-			if in_limit(q.units, unit_count):
-				if prereqs_dne(q, studyplan[term]) or 'L' in q.data[-1]:
-					studyplan[term].append(q)
-					q.set_studyplan()
-					unit_count = unit_count + q.units
+	for i in queue:
+		queue = sp_end_queue(queue, unit_count, studyplan, term)
+
+	test_print_sp_result(studyplan)
+	test_print_sp_queue(queue)
+	print('\nEND:', unit_count, '>', term)
 	
 	return studyplan
-
-
-
-	# look at course
-		# if course was taken:
-			# add to studyplan
-		# elif prereqs_met AND prereqs_dne:
-			# if in_limit AND priority:
-				# add to term
-				# update course as added to studyplan
-				# update unit_count
-			# else:
-				# add to queue
-		# elif NOT prereqs_dne:
-			# populate term with queue:
-				# for i in queue:
-					# if in_limit AND prereqs_dne:
-						# add to term
-						# remove item from queue
-						# update unit_count
-					# elif not in_limit:
-						# term = term + 1
-						# break
-			# add to term
-			# unit_count = i.unit
-		# elif NOT in_limit:
-			# term = term + 1
-
-
-		# elif not prereqs_met(i):
-		# 	for i in queue:
-		# 		if in_limit(i.units, unit_count) and prereqs_dne(i, studyplan[i]):
-		# 			pass
-		# elif prereqs_met(i) and i.priority and in_limit(i.units, unit_count) and prereqs_dne(i, studyplan[count]):	# T T T T
-		# 	studyplan[count].append(i)
-		# 	unit_count = unit_count + i.units
-		# 	i.set_studyplan()
-		# 	print('T T T T: ' + str(i.data))
-		# elif prereqs_met(i) and i.priority and prereqs_dne(i, studyplan[count]):		# T T F
-		# 	queue.append(i)
-		# 	# print('T T F : ' + str(i.data))
-		# elif prereqs_met(i) and in_limit(i.units, unit_count):					# T F T
-		# 	queue.append(i)
-		# 	# print('T F T : ' + str(i.data))
-		# elif prereqs_met(i):														# T F F
-		# 	queue.append(i)
-		# 	# print('T F F : ' + str(i.data))
-		# elif priority(i) and in_limit(i.units, unit_count) and prereqs_dne(i, studyplan[count]):		# F T T T
-		# 	print('F T T F : ' + str(i.data))
-		# 	studyplan[count+1] = []
-		# 	studyplan[count+1].append(i)
-		# 	unit_count = unit_count + i.units
-		# 	print(studyplan[count+1][0].data)
-		# 	i.set_studyplan()
-		# elif i.priority:															# F T F
-		# 	queue.append(i)
-		# 	# print('F T F : ' + str(i.data))
-		# elif in_limit(i.units, unit_count):										# F F T
-		# 	queue.append(i)
-		# 	# print('F F T : ' + str(i.data))
-		# # print(unit_count)
 	
 def test_print_sp_queue(queue):
 	# print('----------------------- QUEUE')
@@ -264,33 +204,6 @@ def test_print_sp_result(studyplan):
 		for j in studyplan[i]:
 			print(j.data, end=', ')
 		print()
-
-	# for each node in bfs:
-		# if priority is True:
-			# if prereqs_met() is True:
-				# add_to_studyplan()
-			# else:
-				# add to queue, high priority
-		# else:
-			# if prereqs_met() is True:
-				# add to queue, normal priority
-
-
-
-		# if i.taken is True:
-		# 	sp_hash['taken'].append(i)		# add to taken courses list
-		# elif (prev_count != 0) and ((prev_count + i.units) <= 16):
-		# 	sp_hash[count-1].append(i)		# add to previous term in study plan
-		# elif (unit_count + i.units) <= 16:
-		# 	sp_hash[count].append(i)		# add to 
-		# 	unit_count = unit_count + i.units
-		# else:
-		# 	count = count + 1
-		# 	sp_hash[count] = []
-		# 	sp_hash[count].append(i)
-		# 	prev_count = unit_count
-		# 	unit_count = i.units
-	# return sp_hash
 
 # populate study plan tree
 def create_tree(file):
