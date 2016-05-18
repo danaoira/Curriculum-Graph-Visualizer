@@ -212,6 +212,7 @@ def prereqs_met(course):
 def print_courses(courses):
 	for i, item in enumerate(sorted(courses), start=1):
 		if i % 7 == 0:
+			print(item, end='')
 			print()
 		else:
 			print('{:10s}'.format(item), end=' ')
@@ -368,8 +369,8 @@ def write_core_elecs(infile, outfile, elective, courses):
 				key = ''
 				val = ''
 			read = True
-			trk_hash[line] = ''
-			key = line
+			trk_hash[line] = ''							# create hash for req or elec
+			key = line									# set line as the key variable
 		elif '#' in line:
 			if key is not '':
 				trk_hash[key] = val
