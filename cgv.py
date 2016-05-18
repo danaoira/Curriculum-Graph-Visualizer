@@ -79,6 +79,7 @@ def create_studyplan(bfs):
 	studyplan[term] = []
 
 	for i in bfs:
+		print('\nSTART:', i.data, i.priority, prereqs_met(i), prereqs_dne(i, studyplan[term]), in_limit(i.units, unit_count))
 		if i.taken:
 			studyplan['taken'].append(i)
 			i.set_studyplan()
@@ -99,13 +100,13 @@ def create_studyplan(bfs):
 			unit_count = i.units
 		elif not i.priority:
 			sp_to_queue(queue, i)
-		# test_print_sp_result(studyplan)
-		# test_print_sp_queue(queue)
+		test_print_sp_result(studyplan)
+		test_print_sp_queue(queue)
 
 	for i in queue:
 		queue = sp_end_queue(queue, unit_count, studyplan, term)
-	# test_print_sp_result(studyplan)
-	# test_print_sp_queue(queue)
+	test_print_sp_result(studyplan)
+	test_print_sp_queue(queue)
 	
 	return studyplan
 
@@ -138,12 +139,6 @@ def create_tree(file):
 			pass
 	return tree
 
-def in_limit(course_units, unit_count):
-	if (unit_count + course_units) <= 16:
-		return True
-	else:
-		return False
-
 # find major
 def get_major(file):
 	for line in file:
@@ -171,6 +166,12 @@ def handle_taken_input(usr_input, course_list, taken_list):
 			taken_list.append(i)
 		else:
 			print('> Does not exist: ' + str(i))
+
+def in_limit(course_units, unit_count):
+	if (unit_count + course_units) <= 16:
+		return True
+	else:
+		return False
 
 # user input for elective track
 def input_elective(elec_trk):
@@ -284,13 +285,14 @@ def test_print_bfs(bfs):
 		print(i.units, i.data, i.priority, i.taken)
 
 def test_print_sp_queue(queue):
-	# print('----------------------- QUEUE')
+	# print('\n----- QUEUE RESULTS --------------------------')
 	print('QUEUE:', end=' ')
 	for i in queue:
 		print(i.data, end=', ')
+	print()
 
 def test_print_sp_result(studyplan):
-	# print('------------------ STUDY PLAN')
+	print('----- STUDY PLAN TRACE -----------------------')
 	for i in studyplan:
 		print(i, end=' -> ')
 		for j in studyplan[i]:
@@ -359,28 +361,12 @@ def write_core_elecs(infile, outfile, elective, courses):
 
 	for line in infile:
 		r = re_courses.findall(line)
-		if '##' in line:
-			pass
-		elif ('required' in line) or (elective in line):
-			if key is not '':
-				trk_hash[key] = val
-				outfile.write(key)
-				outfile.write(trk_hash[key] + '\n')
-				key = ''
-				val = ''
+		if ('required' in line) or (elective in line):
 			read = True
-			trk_hash[line] = ''							# create hash for req or elec
-			key = line									# set line as the key variable
-		elif '#' in line:
-			if key is not '':
-				trk_hash[key] = val
-				outfile.write(key)
-				outfile.write(trk_hash[key] + '\n')
-				key = ''
-				val = ''
-			read = False
+			outfile.write(line)
 		elif read is True and r:
-			val = val + line
+			outfile.write(line)
+			# val = val + line
 			if r[0] not in courses:
 				courses.append(r[0])
 			try:
@@ -388,6 +374,8 @@ def write_core_elecs(infile, outfile, elective, courses):
 					courses.append(r[1])
 			except:
 				pass
+		elif line is '\n':
+			read = False
 
 # write suggestions to studyplan.txt
 def write_suggestions(studyplan, outfile):

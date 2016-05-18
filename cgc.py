@@ -18,14 +18,14 @@ c0.body.append('color=lightgrey')
 c0.node_attr.update(style='filled', color='white')
 c0.edge_attr.update(color='white')
 c0.node('Semester 6', color='plum')
-c0.node('Semester 7')
+c0.node('Semester 7', color='crimson')
 c0.node('Semester 3', color='peachpuff')
 c0.node('Semester 4', color='darkseagreen')
 c0.node('Semester 5', color='lightblue')
 c0.node('Completed', color='grey')
 c0.node('Semester 1', color='pink')
 c0.node('Semester 2', color='lightsalmon')
-c0.node('Semester 8')
+c0.node('Semester 8', color='chocolate')
 c0.edge('Semester 6', 'Semester 7')
 c0.edge('Semester 7', 'Semester 8')
 c0.edge('Semester 3', 'Semester 4')
@@ -80,7 +80,7 @@ for line in f:
 	elif ('#' in line.split(' ')) and ('required' in line):
 		write_to = 'req_electives'
 		req_electives = req_electives + line[2:-1] + '"\')\n' 
-	elif ('#' in line.split(' ')) and ('IE' in line):
+	elif ('Track' in line):
 		write_to = 'trk_electives'
 		trk_electives = trk_electives + line[2:-1] + '"\')\n'
 	elif ('#' in line.split(' ')) and ('taken' in line):
@@ -103,7 +103,6 @@ for line in f:
 		elif (course) and ('--' in line):
 			core_courses = core_courses + 'g' + coreq_edge(course[0], course[1], False)
 		elif (course):
-			print(line)
 			core_courses = core_courses + 'g' + node(course[0])
 	elif write_to is 'req_electives':
 		if (course) and ('->' in line):
