@@ -112,25 +112,25 @@ def create_tree(file):
 	# output: tree organized by courses and prerequisites
 	tree = OrderedDict()
 	tree['ROOT'] = Node("ROOT")
-	tree['ROOT'].in_studyplan = True
+	tree['ROOT'].studyplan = True
 
 	for line in file:
 		r = re_courses.findall(line)
 		if r and r[0] not in tree:
 			tree[r[0]] = Node(r[0])				# create Node obj
 			tree['ROOT'].add_child(tree[r[0]])	# set as child to ROOT
+			tree[r[0]].set_units()				# set units
 			if '*' in line:
 				tree[r[0]].set_priority()		# set priority
-			tree[r[0]].set_units()				# set units
 		try:
 			if r and r[1] not in tree:
 				tree[r[1]] = Node(r[1])
 			tree[r[1]].add_parent(tree[r[0]])
 			tree[r[0]].add_child(tree[r[1]])
+			tree[r[1]].set_units()
 			if '*' in line:
 				tree[r[0]].set_priority()
 				tree[r[1]].set_priority()
-			tree[r[1]].set_units()
 		except:
 			pass
 	return tree
@@ -434,5 +434,7 @@ test_print_sp_result(studyplan_result, t)
 of.close()
 
 write_suggestions(studyplan_result, fn)
+
+print('Generating study plan ...')
 
 os.startfile('cgc.py')

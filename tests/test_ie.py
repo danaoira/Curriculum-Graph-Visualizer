@@ -14,17 +14,17 @@ c0.body.append('color=lightgrey')
 c0.node_attr.update(style='filled', color='white')
 c0.edge_attr.update(color='white')
 c0.node('Semester 6', color='plum')
-c0.node('Semester 7')
+c0.node('Semester 7', color='crimson')
 c0.node('Semester 3', color='peachpuff')
 c0.node('Semester 4', color='darkseagreen')
 c0.node('Semester 5', color='lightblue')
 c0.node('Completed', color='grey')
 c0.node('Semester 1', color='pink')
 c0.node('Semester 2', color='lightsalmon')
-c0.node('Semester 8')
+c0.node('Semester 8', color='chocolate')
 c0.edge('Semester 6', 'Semester 7')
-c0.edge('Semester 7', 'Semester 8', 'critical path', color='red')
-c0.edge('Semester 7', 'Semester 8', 'corequisite', arrowhead='dot', arrowtail='dot', dir='both', color='black')
+c0.edge('Semester 7', 'Semester 8')
+c0.edge('Semester 7', 'Semester 8')
 c0.edge('Semester 3', 'Semester 4')
 c0.edge('Semester 4', 'Semester 5')
 c0.edge('Completed', 'Semester 1')
@@ -52,8 +52,8 @@ c2.body.append('style = filled')
 c2.node('CPSC 431')
 c2.node('CPSC 473')
 c2.node('CPSC 476')
-c2.node('Free Elective 1')
-c2.node('Free Elective 2')
+# c2.node('Free Elective 1')
+# c2.node('Free Elective 2')
 
 # SC track
 c3 = Digraph('cluster_3')
@@ -193,17 +193,17 @@ c.edge('MATH 270B', 'CPSC 335', color='red')
 c.edge('MATH 338', 'CPSC 335', color='red')
 
 # IE track
-# c.edge('CPSC 332', 'CPSC 431')
-# c.edge('CPSC 332', 'CPSC 473')
-# c.edge('CPSC 223', 'CPSC 476')
-# c.edge('CPSC 351', 'CPSC 476')
+c.edge('CPSC 332', 'CPSC 431')
+c.edge('CPSC 332', 'CPSC 473')
+c.edge('CPSC 223', 'CPSC 476')
+c.edge('CPSC 351', 'CPSC 476')
 
 # SC track
 
 # MG track
-c.edge('CPSC 131', 'CPSC 386')
-c.edge('CPSC 150B', 'CPSC 484')
-c.edge('MATH 270B', 'CPSC 484')
+# c.edge('CPSC 131', 'CPSC 386')
+# c.edge('CPSC 150B', 'CPSC 484')
+# c.edge('MATH 270B', 'CPSC 484')
 
 # SE track
 
@@ -214,14 +214,14 @@ c.edge('MATH 270B', 'CPSC 484')
 # science/math electives
 
 c.subgraph(c1)
-# c.subgraph(c2)
+c.subgraph(c2)
 # c.subgraph(c3)
-c.subgraph(c4)
+# c.subgraph(c4)
 # c.subgraph(c5)
 # c.subgraph(c6)
 # c.subgraph(c7)
 c.subgraph(c0)
 
 print(c.source)
-
+input()
 c.view()
