@@ -362,7 +362,7 @@ def write_core_elecs(infile, outfile, elective, courses):
 		r = re_courses.findall(line)
 		if ('required' in line) or (elective in line):
 			read = True
-			outfile.write(line)
+			outfile.write('\n' + line)
 		elif read is True and r:
 			outfile.write(line)
 			# val = val + line
