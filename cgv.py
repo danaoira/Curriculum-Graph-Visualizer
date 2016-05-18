@@ -79,7 +79,7 @@ def create_studyplan(bfs):
 	studyplan[term] = []
 
 	for i in bfs:
-		print('\nSTART:', i.data, i.priority, prereqs_met(i), prereqs_dne(i, studyplan[term]), in_limit(i.units, unit_count))
+		# print('\nSTART:', i.data, i.priority, prereqs_met(i), prereqs_dne(i, studyplan[term]), in_limit(i.units, unit_count))
 		if i.taken:
 			studyplan['taken'].append(i)
 			i.set_studyplan()
@@ -100,13 +100,9 @@ def create_studyplan(bfs):
 			unit_count = i.units
 		elif not i.priority:
 			sp_to_queue(queue, i)
-		test_print_sp_result(studyplan)
-		test_print_sp_queue(queue)
 
 	for i in queue:
 		queue = sp_end_queue(queue, unit_count, studyplan, term)
-	test_print_sp_result(studyplan)
-	test_print_sp_queue(queue)
 	
 	return studyplan
 
@@ -158,8 +154,8 @@ def get_tracks(file):
 	return track_list
 
 # handles course completed input
-def handle_taken_input(usr_input, course_list, taken_list):
-	for i in usr_input:
+def handle_taken_input(user_input, course_list, taken_list):
+	for i in user_input:
 		if i in taken_list:
 			print('> Repeat info: ' + str(i))
 		elif i in course_list:
@@ -276,74 +272,77 @@ def sp_end_queue(queue, unit_count, studyplan, term):
 	return queue
 
 # for testing: print bfs result
-def test_print_bfs(bfs):
+def test_print_bfs(bfs, test_file):
 	# input: bfs results
 	# output: prints data of bfs results
-	print('\n----- BREADTH FIRST SEACH RESULTS ------------\n')
-	print('UNITS COURSE PRIORITY TAKEN')
+	test_file.write('\n\n----- BREADTH FIRST SEACH RESULTS ------------\n\n')
+	test_file.write('UNITS COURSE PRIORITY TAKEN\n')
 	for i in bfs:
-		print(i.units, i.data, i.priority, i.taken)
+		test_file.write(str(i.units) + ' ' + str(i.data) + ' ' + str(i.priority) + ' ' + str(i.taken) + '\n')
 
-def test_print_sp_queue(queue):
-	# print('\n----- QUEUE RESULTS --------------------------')
-	print('QUEUE:', end=' ')
+def test_print_sp_queue(queue, test_file):
+	test_file.write('\n\n----- QUEUE RESULTS --------------------------\n\n')
+	test_file.write('QUEUE: ')
 	for i in queue:
-		print(i.data, end=', ')
-	print()
+		test_file.write(str(i.data) + ', ')
+	test_file.write('\n')
 
-def test_print_sp_result(studyplan):
-	print('----- STUDY PLAN TRACE -----------------------')
+def test_print_sp_result(studyplan, test_file):
+	test_file.write('\n\n----- STUDY PLAN TRACE -----------------------\n\n')
 	for i in studyplan:
-		print(i, end=' -> ')
+		test_file.write('\n' + str(i) + ' -> ')
 		for j in studyplan[i]:
-			print(j.data, end=', ')
-		print()
+			if j != studyplan[i][-1]:
+				test_file.write(str(j.data) + ', ')
+			else:
+				test_file.write(str(j.data))
+
 
 # for testing: print study plan suggestion
-def test_print_studyplan(studyplan):
+def test_print_studyplan(studyplan, test_file):
 	# input: dictionary of study plan data
 	# output: prints the study plan data by semester
-	print('\n----- STUDY PLAN RESULTS ---------------------\n')
+	test_file.write('\n\n----- STUDY PLAN RESULTS ---------------------\n\n')
 	for i in studyplan:
-		print('cluster:', i)
+		test_file.write('cluster: ' + str(i) + '\n')
 		for j in studyplan[i]:
-			print(j.units, j.data)
-		print()
+			test_file.write(str(j.units) + ' ' + str(j.data) + '\n')
+		test_file.write('\n')
 
 # for testing: print tree results
-def test_print_tree(tree):
+def test_print_tree(tree, test_file):
 	# input: study plan tree
 	# output: prints the tree results
-	print('\n----- STUDY PLAN TREE RESULTS ----------------\n')
+	test_file.write('\n\n----- STUDY PLAN TREE RESULTS ----------------\n\n')
 	for i in tree:
 		if len(tree[i].children) > 0:
 			if tree[i].priority == True:
-				print('*', end=' ')
-			print(str(tree[i].data) + ' -> ', end='')
+				test_file.write('* ')
+			test_file.write(str(tree[i].data) + ' -> ')
 		else:
-			print(tree[i].data)
+			test_file.write(str(tree[i].data) + '\n')
 		for j in tree[i].children:
 			if j != tree[i].children[-1]:
-				print(j.data, end=', ')
+				test_file.write(str(j.data) + ', ')
 			else:
-				print(j.data)
+				test_file.write(str(j.data) + '\n')
 
-def test_print_prereqs(tree):
+def test_print_prereqs(tree, test_file):
 	# input: study plan tree
 	# output: prints courses and their prerequisites
-	print('\n----- STUDY PLAN PREREQUISITES ---------------\n')
+	test_file.write('\n\n----- STUDY PLAN PREREQUISITES ---------------\n\n')
 	for i in tree:
 		if len(tree[i].parents) > 0:
 			if tree[i].priority == True:
-				print('*', end=' ')
-			print(str(tree[i].data) + ' -> ', end='')
+				test_file.write('* ')
+			test_file.write(str(tree[i].data) + ' -> ')
 		else:
-			print(tree[i].data)
+			test_file.write(str(tree[i].data) + '\n')
 		for j in tree[i].parents:
 			if j != tree[i].parents[-1]:
-				print(j.data, end=', ')
+				test_file.write(str(j.data) + ', ')
 			else:
-				print(j.data)
+				test_file.write(str(j.data) + '\n')
 
 # updates data of taken courses
 def update_taken(tree, taken_list):
@@ -394,6 +393,7 @@ def write_suggestions(studyplan, outfile):
 f = open(sys.argv[1], 'r')
 fn = 'studyplan.txt'		# filename
 of = open(fn, 'w')			# output file
+t = open('test_results.txt', 'w')
 
 major = get_major(f)
 
@@ -421,14 +421,15 @@ of = open(fn, 'r')
 
 tree_result = create_tree(of)
 update_taken(tree_result, taken_courses)
-# test_print_tree(tree_result)
-# test_print_prereqs(tree_result)
+test_print_tree(tree_result, t)
+test_print_prereqs(tree_result, t)
 
 bfs_result = bfs(tree_result['ROOT'])
-# test_print_bfs(bfs_result)
+test_print_bfs(bfs_result, t)
 
 studyplan_result = create_studyplan(bfs_result)
-# test_print_studyplan(studyplan_result)
+test_print_studyplan(studyplan_result, t)
+test_print_sp_result(studyplan_result, t)
 
 of.close()
 
