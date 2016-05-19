@@ -8,9 +8,10 @@ This program is created for [CPSC 597 Project](http://www.fullerton.edu/ecs/cs/_
 
 *Keywords – graph visualization, breadth first search, directed tree, curriculum planning*
 
-## Graduate Project Proposal
-* [Presentation](https://github.com/danaoira/Curriculum-Graph-Visualizer/blob/master/proposal/Proposal%20Presentation.pptx?raw=true) for Graduate Seminar course
-* [Report](https://github.com/danaoira/Curriculum-Graph-Visualizer/blob/master/proposal/Proposal%20Report.pdf) submitted and approved to the CS department
+## Graduate Project Deliverables
+* [Proposal Presentation](https://github.com/danaoira/Curriculum-Graph-Visualizer/blob/master/proposal/Proposal%20Presentation.pptx?raw=true) for Graduate Seminar course
+* [Proposal](https://github.com/danaoira/Curriculum-Graph-Visualizer/blob/master/proposal/Proposal%20Report.pdf) submitted and approved to the CS department
+* [Final Report](https://github.com/danaoira/CurriculumGraphVisualizer/blob/master/deliverables/Final%20Report.pdf) submitted and passed for completion of CPSC 597 on 5/18/16
 
 ## Links
 * GraphViz: http://www.graphviz.org/
