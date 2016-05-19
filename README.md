@@ -26,7 +26,7 @@ This program is created for [CPSC 597 Project](http://www.fullerton.edu/ecs/cs/_
 
 ## Operating Instructions
 
-1. Execute in console: `python cgv.py <CIF FILE>`.
+1. Execute in console: `python cgv.py <CIF FILE>`
 2. Select elective track.
 3. Input courses to mark as complete.
 4. Enter twice to generate graph.
