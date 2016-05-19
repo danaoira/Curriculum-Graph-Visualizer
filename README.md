@@ -6,7 +6,7 @@ Import a list of courses, select the elective track and completed courses to gen
 
 This program is created for [CPSC 597 Project](http://www.fullerton.edu/ecs/cs/_resources/pdf/CS_ProjGuidelines.pdf) to complete the M.S. Computer Science degree in Spring 2016.
 
-*Keywords – graph visualization, breadth first search, directed tree, curriculum planning*
+*Keywords – graph visualization, breadth first search, directed graph, curriculum planning*
 
 ## Graduate Project Deliverables
 * [Proposal Presentation](https://github.com/danaoira/Curriculum-Graph-Visualizer/blob/master/proposal/Proposal%20Presentation.pptx?raw=true) for Graduate Seminar course
