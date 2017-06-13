@@ -2,6 +2,8 @@
 
 The Curriculum Graph Visualizer (CGV) converts a file with a curriculum structure to a graphical representation using [Python](https://www.python.org/), [DOT](http://www.graphviz.org/doc/info/lang.html) language and [GraphViz](http://www.graphviz.org/).
 
+![https://github.com/danaoira/danaoira.github.io/raw/master/images/00-curriculum-graph-visualizer.PNG]
+
 Import a list of courses, select the elective track and completed courses to generate a graph with course suggestions by semester.
 
 This program is created for [CPSC 597 Project](http://www.fullerton.edu/ecs/cs/_resources/pdf/CS_ProjGuidelines.pdf) to complete the M.S. Computer Science degree in Spring 2016.
